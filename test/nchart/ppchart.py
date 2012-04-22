@@ -12,7 +12,7 @@ from pygooglechart import Axis
 
 def main():
      size_limit = 3000 * 100;
-     x_size = 3000
+     x_size = 1000
      y_size = 100
      y_max = 100
      
@@ -53,7 +53,7 @@ def main():
           l = ifile.readline()
           if len(l) == 0:
                break
-          print("get line: %s" % l[:-1])
+          # print("get line: %s" % l[:-1])
      data = [
           32, 34, 34, 32, 34, 34, 32, 32, 32, 34, 34, 32, 29, 29, 34, 34, 34, 37,
           37, 39, 42, 47, 50, 54, 57, 60, 60, 60, 60, 60, 60, 60, 62, 62, 60, 55,
@@ -67,17 +67,28 @@ def main():
      data_list = [data, data2]
      # output file section
      chart = SimpleLineChart(x_size, y_size, y_range=[0, y_max])
-	# init color
-     RR=16; GG=16; BB=160
+     # set data
+     for d in data_list:
+          chart.add_data(d)
+        # init color
+     RR=16; GG=16; BB=16
      color_list = []
-     for x in range(len(data_list)):
+     for i in range(len(data_list)):
           RR+=15;GG+=15;BB+=15
           color_list.append("%s%s%s" %
                             (str(hex(RR%255))[2:],
                              str(hex(GG%255))[2:],
                              str(hex(BB%255))[2:]) )
-     #print(color_list)
-     
+     # print(color_list)
+     chart.set_colours(color_list)
+     chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
+     chart.set_grid(0, 25, 5, 5)
+     left_axis = range(0, y_max+1, 25)
+     left_axis[0] = ""
+     chart.set_axis_labels(Axis.LEFT, left_axis)
+     chart.set_axis_labels(Axis.BOTTOM, ["0:00", "3:00", "6:00", "9:00", "12:00", "15:00", "18:00", "21:00", "24:00"])
+    
+     chart.download(options.chartname)
                             
 
 if __name__ == "__main__":
