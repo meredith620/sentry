@@ -13,7 +13,7 @@ from pygooglechart import Axis
 def main():
      size_limit = 3000 * 100;
      x_size = 1000
-     y_size = 100
+     y_size = 300
      y_max = 100
      
      parser = OptionParser()
@@ -74,7 +74,7 @@ def main():
      RR=16; GG=16; BB=16
      color_list = []
      for i in range(len(data_list)):
-          RR+=15;GG+=15;BB+=15
+          RR+=10;GG+=15;BB+=65
           color_list.append("%s%s%s" %
                             (str(hex(RR%255))[2:],
                              str(hex(GG%255))[2:],
@@ -83,9 +83,9 @@ def main():
      chart.set_colours(color_list)
      chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
      chart.set_grid(0, 25, 5, 5)
-     left_axis = range(0, y_max+1, 25)
-     left_axis[0] = ""
-     chart.set_axis_labels(Axis.LEFT, left_axis)
+     # left_axis = range(0, y_max+1, 25)
+     # left_axis[0] = ""
+     chart.set_axis_labels(Axis.LEFT, ["","25%","50%","75%","100%"])
      chart.set_axis_labels(Axis.BOTTOM, ["0:00", "3:00", "6:00", "9:00", "12:00", "15:00", "18:00", "21:00", "24:00"])
     
      chart.download(options.chartname)
