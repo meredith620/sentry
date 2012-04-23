@@ -10,7 +10,7 @@ class Catcher:
 		self.date=time.strftime('%Y%m%d')
 		self.file=open(self.date+'.sty','a')
 		self.head=[
-			'cpu:%user', 'cpu:%nice', 'cpu:%system', 'cpu:%iowait', 'cpu:%idle',
+			'time','cpu:%user', 'cpu:%nice', 'cpu:%system', 'cpu:%iowait', 'cpu:%idle',
 			'mem:total', 'mem:free', 'mem:used', 'mem:free+cache+buffer', 'mem:used-cache-buffer',
 			'disk:tps', 'disk:read(MB/s)', 'disk:write(MB/s)', 'disk:avgrq-sz', 'disk:await', 'disk:svctm', 'disk:%util',
 			'net:lo:in(MB/s)', 'net:lo:out(MB/s)', 'net:lo:indrop(packet/s)', 'net:lo:outdrop(packet/s)',
@@ -42,7 +42,7 @@ class Catcher:
 		mem=mem.split()
 		cells.append(str(float(mem[1])/1000))
 		cells.append(str(float(mem[2])/1000))
-		cells[0]=cells[1]+cells[2]
+		cells[0]=str(float(mem[1])/1000+float(mem[2])/1000)
 		cached=float(mem[4])/1000+float(mem[5])/1000
 		cells.append(str(float(cells[1])+cached))
 		cells.append(str(float(cells[2])-cached))
