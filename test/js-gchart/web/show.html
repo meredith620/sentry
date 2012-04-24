@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script type='text/javascript' src='http://www.google.com/jsapi'></script>
+    <script type='text/javascript' src='jquery-1.7.2.min.js'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {'packages':['annotatedtimeline']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+		var json_data=$.ajax({
+			url:'info?type=cpu',
+			dataType:'json',
+			async:false
+		}).responseText;
+
+		var tmp='[["2012-04-23T16:01:00.000Z",0.09,0.00,0.12,0.43,99.3],["2012-04-23T16:02:00.000Z",0.07,0.00,0.00,0.40,99.53],["2012-04-23T16:03:00.000Z",0.05,0.00,0.01,0.52,99.41],["2012-04-23T16:04:00.000Z",0.05,0.00,0.02,0.36,99.56],["2012-04-23T16:05:00.000Z",0.04,0.00,0.01,0.10,99.85]]';
+
+		var show_data=JSON.parse(json_data);
+		for(index in show_data){
+			show_data[index][0]=new Date(show_data[index][0]);
+			//alert(show_data[index]);
+			
+			show_data[index][1]=Number(show_data[index][1]);
+			show_data[index][2]=Number(show_data[index][2]);
+			show_data[index][3]=Number(show_data[index][3]);
+			show_data[index][4]=Number(show_data[index][4]);
+			show_data[index][5]=Number(show_data[index][5]);
+			console.log(show_data[index]);
+			
+		}
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', '%user');
+        data.addColumn('number', '%nice');
+        data.addColumn('number', '%system');
+        data.addColumn('number', '%iowait');
+        data.addColumn('number', '%idle');
+
+		
+        data.addRows(show_data);
+
+        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+        chart.draw(data, {displayAnnotations: true});
+      }
+    </script>
+  </head>
+
+  <body>
+    // Note how you must specify the size of the container element explicitly!
+    <div id='chart_div' style='width: 700px; height: 240px;'></div>
+  </body>
+</html>
