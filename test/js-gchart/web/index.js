@@ -1,15 +1,37 @@
 var http=require('http');
 var url=require('url');
 var querystring=require('querystring');
+var ds=require('./data');
 
 var handler={};
 
+function info(response,param){
+	console.log(param);
+	if(param.type==='cpu'){
+		console.log(JSON.stringify(cpu_info));
+		response.write(JSON.stringify(cpu_info));
+		response.end();
+	}else{
+		response.end('show what?');
+	}
+}
+
 function render(response,file){
 	var fs=require('fs');
+	//current use node's fs api,TODO use do.js
+	console.log('read file:'+file);
+	fs.readFile(file,'ascii',function(err,data){
+		if(err){
+			throw err;
+		}
+		response.end(data);
+	});
 }
 
 function route(pathname,response,post){
 	if(pathname.match(".html")){
+		render(response,pathname.slice(1));
+	}else if(pathname.match(".js")){
 		render(response,pathname.slice(1));
 	}else if(typeof handler[pathname] ==='function'){
 		handler[pathname](response,querystring.parse(post));
@@ -27,13 +49,12 @@ function start(){
 			post+=chunk;
 		});
 		request.addListener('end',function(){
-			route(pathname,response,post);
+			route(pathname,response,url.parse(request.url).query);
 		});
-	}).listen(3333);
+	}).listen(8091);
 	console.log('server start');
 }
 
-//info?type=cpu
+
 handler['/info']=info;
-start();
-//add a job sched
+ds.load_data('20120424.sty',start);
