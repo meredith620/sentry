@@ -1,0 +1,7 @@
+#check finalnobel
+cmd="ps aux | grep 'python INSTALL_ROOT/BIN_INSTALL_PATH/catcher.py' | grep -v grep"
+eval $cmd
+if (( $? != 0 ));then
+    echo -e "\033[1;31m ERROR! \033[m INSTALL_ROOT/BIN_INSTALL_PATH/catcher.py"
+else echo -e "\033[1;32m OK! \033[m INSTALL_ROOT/BIN_INSTALL_PATH/catcher.py"
+fi

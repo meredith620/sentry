@@ -1,0 +1,133 @@
+#! /bin/bash
+
+MYLANG="zh_CN.UTF-8"
+source process_by_conf.sh
+
+start_module()
+{
+    local module=$1
+    local i=0
+    local j=0
+    # echo "all section num: ${#key_num_array[@]}"
+    
+    for ((i = 0; i < ${#key_num_array[@]}; i++))
+    do
+	   # echo -e "\tsection ${section_name_array[i]}";
+	   host=${section_name_array[i]}
+	   dir=""
+	   for ((j = 0; $j < ${key_num_array[i]}; j++))
+	   do
+		  # echo -e "key - ${key_array[i*ROW+j]} \t value - ${value_array[i*ROW+j]}";
+		  if [[ ${key_array[i*ROW+j]} == "DSERVER_INSTALL_PATH" ]];then
+			 dir=${value_array[i*ROW+j]}
+			 break;
+		  fi
+	   done
+	   cmd=""
+	   if [[ $module == "all" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dguard; ./restart_dataguard.sh </dev/null >&/dev/null"
+		  cmd="${cmd};export LANG=$MYLANG; cd ${dir}/dnode; ./restart_dataserver_lighttpd.sh"
+	   elif [[ $module == "dguard" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dguard; ./restart_dataguard.sh </dev/null >&/dev/null"
+	   elif [[ $module == "dnode" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dnode; ./restart_dataserver_lighttpd.sh"
+	   fi
+	   echo "cmd: $cmd"
+	   ssh $host "$cmd"
+    done 
+}
+
+stop_moduLe()
+{
+    local i=0
+    local j=0
+    # echo "all section num: ${#key_num_array[@]}"
+    
+    for ((i = 0; i < ${#key_num_array[@]}; i++))
+    do
+	   # echo -e "\tsection ${section_name_array[i]}";
+	   host=${section_name_array[i]}
+	   dir=""
+	   for ((j = 0; $j < ${key_num_array[i]}; j++))
+	   do
+		  # echo -e "key - ${key_array[i*ROW+j]} \t value - ${value_array[i*ROW+j]}";
+		  if [[ ${key_array[i*ROW+j]} == "DSERVER_INSTALL_PATH" ]];then
+			 dir=${value_array[i*ROW+j]}
+			 break;
+		  fi
+	   done
+	   cmd=""
+	   if [[ $module == "all" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dguard; ./stop_dataguard.sh"
+		  cmd="${cmd};export LANG=$MYLANG; cd ${dir}/dnode; ./stop_dataserver_lighttpd.sh"
+	   elif [[ $module == "dguard" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dguard; ./stop_dataguard.sh"
+	   elif [[ $module == "dnode" ]];then
+		  cmd="export LANG=$MYLANG; cd ${dir}/dnode; ./stop_dataserver_lighttpd.sh"
+	   fi
+	   echo "cmd: $cmd"
+	   ssh $host "$cmd"
+    done   
+}
+
+useage="cmd -g conf -f model \n
+			generate config files \n
+		  -r conf -m [all/dguard/dnode] \n
+			start module \n
+		  -t conf -m [all/dguard/dnode] \n
+			stop module \n"
+mode="gen"
+module="all"
+model_var_file=""
+while getopts "g:r:t:f:m:" arg
+do
+    case $arg in
+	   g)
+		  # echo "generate $OPTARG";
+		  model_var_file=$OPTARG
+		  mode="gen"
+		  ;;
+	   r)
+		  # echo "start $OPTARG";
+		  model_var_file=$OPTARG
+		  mode="start"
+		  ;;
+	   t)
+		  # echo "stop $OPTARG";
+		  model_var_file=$OPTARG
+		  mode="stop"
+		  ;;
+	   f)
+		  # echo "get conf_file $OPTARG";
+		  conf_model=$OPTARG
+		  ;;
+	   m)
+		  # echo "get module $OPTARG";
+		  module=$OPTARG
+		  ;;
+	   ?)
+		  echo "unknow argument!";
+		  echo ""
+		  exit 1
+		  ;;
+    esac
+done
+# model_var_file=$1
+# conf_model=$2
+
+if (( ${#model_var_file} == 0 ));then
+    echo -e $useage
+    exit 1
+fi
+read_conf $model_var_file
+if [[ $mode == "gen" ]];then
+    if ((${#conf_model} == 0));then
+	   echo -e $usage
+	   exit 1
+    fi
+    sed_substitude $conf_model conf    
+elif [[ $mode == "start" ]];then
+    start_module $module
+elif [[ $mode == "stop" ]];then
+    stop_moduLe $module
+fi
