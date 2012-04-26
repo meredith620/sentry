@@ -4,9 +4,7 @@
 #   Description:  do deploy
 #   Version    :  1.0
 #
-#   Author     :  lvliang@miaozhen.com
-#   Department :  DSP
-#   Company    :  miaozhen system
+#   Author     :  lvliang
 #========= history ==========
 #date		author	content
 #2012-03-20	lvliang	created

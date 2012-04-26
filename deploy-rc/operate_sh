@@ -1,4 +1,15 @@
 #! /bin/bash
+#
+##################################################################
+#   Filename   :  operate_sh
+#   Description:  do some actions
+#   Version    :  1.0
+#
+#   Author     :  lvliang
+#========= history ==========
+#date		author	content
+#2012-03-20	lvliang	created
+##################################################################
 
 MYLANG="zh_CN.UTF-8"
 source process_by_conf.sh
