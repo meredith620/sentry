@@ -9,8 +9,8 @@ import string
 from optparse import OptionParser
 
 def main():
-     x_size = 1024
-     y_size = 768
+     x_size = 2880
+     y_size = 700
      
      parser = OptionParser()
      parser.add_option("-f", "--file", dest="filename",
@@ -19,8 +19,8 @@ def main():
                        help="output chart file")
      parser.add_option("-s", "--size", dest="size",
                        help="'xsize,ysize' ")
-     parser.add_option("-y", "--y-max", dest="y_max",
-                       help="y max limit")
+     parser.add_option("-t", "--type", dest="type",
+                       help="'t1,t2,t3' draw type lines")
      (options, args) = parser.parse_args(sys.argv[1:])          
      if (options.filename == None or options.chartname == None):
           parser.print_help()
@@ -35,11 +35,11 @@ def main():
           else :
                parser.print_help()
                sys.exit(1)
-  
-     # init y range
-     if (options.y_max):
-          y_max = string.atoi(options.y_max)
                
+     if (options.type):
+          val_types = options.type.split(",")
+     else:val_types = ["user", "system", "iowait", "nice"] #default
+                 
      # ===========input file section=============
      ifile = open(options.filename)
      l = ifile.readline()
@@ -54,22 +54,26 @@ def main():
      data_map = {}     
      for (num,ite) in enumerate(items):
           data_map[ite] = []
-          
+
+     maxn = 0.0
      while True:
           l = ifile.readline()
           if len(l) == 0:
                break
           line_datas = l.split()
 
-          if (len(line_datas) != len(items) + 2):
+          if (len(line_datas) != len(items) + 1):
                continue
-          # for (num, key) in enumerate(items):
-          #      data_map[key].append(float(line_datas[num+2]) * 100)
-          #      print("%s" % line_datas[num])
-          # print("get line: %s" % l[:-1])
-          data_map["cpu:%user"].append(float(line_datas[2]) * 200)
-          data_map["net:eth0:out(MB/s)"].append((float(line_datas[24])/1.25))
-          data_map["net:eth0:in(MB/s)"].append((float(line_datas[23])/1.25))
+          for (num, key) in enumerate(items):
+               for val_t in val_types:
+                    if (key.find(val_t) != -1):
+                         val = float(line_datas[num+1])
+                         data_map[key].append(val)
+                         if (val > maxn): maxn = val
+     print("max: %f" % maxn)
+          # data_map["cpu:%user"].append(float(line_datas[2]) * 100)
+          # data_map["net:eth0:out(MB/s)"].append((float(line_datas[24])/1.25))
+          # data_map["net:eth0:in(MB/s)"].append((float(line_datas[23])/1.25))
           
      data = { "cpu":[32, 34, 34, 32, 34, 34, 32, 32, 32, 34, 34, 32, 29, 29, 34, 34, 34, 37,
                      37, 39, 42, 47, 50, 54, 57, 60, 60, 60, 60, 60, 60, 60, 62, 62, 60, 55,
@@ -78,14 +82,18 @@ def main():
                       32, 34, 34, 32, 34, 34, 32, 32, 32, 34, 34, 32, 29, 29, 34, 34, 34, 37,
                       37, 39, 42, 47, 50, 54, 57, 60, 60, 60, 60, 60, 60, 60, 100]}
      use_data = {}
-     use_data["cpu:%user"] = data_map["cpu:%user"]
-     # use_data["net:eth0:out(MB/s)"] = data_map["net:eth0:out(MB/s)"]
-     # use_data["net:eth0:in(MB/s)"] = data_map["net:eth0:in(MB/s)"]
+     for k in data_map.keys():
+          for val_t in val_types:
+               if (k.find(val_t) != -1):
+                    use_data[k] = data_map[k]
+                    print("draw key: %s" % k)
+     #use_data["net:eth0:out(MB/s)"] = data_map["net:eth0:out(MB/s)"]
+     #use_data["net:eth0:in(MB/s)"] = data_map["net:eth0:in(MB/s)"]
      # ==========output file section==========
-     h_labs = ["0:00", "3:00", "6:00", "9:00", "12:00", "15:00", "18:00", "21:00", "24:00"]
-     v_labs = ["","25%","50%","75%","100%"]
-     CairoPlot.dot_line_plot(options.chartname, data, x_size, y_size, background = (204,204,204), border = 0,
-                             axis = True, grid = True, dots = False, h_labels = h_labs, v_labels = v_labs)
+     h_labs = ["0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00" , "11:00", "12:00", "13:00", "14:00",  "15:00","16:00" ,"17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
+     v_labs = ["", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"]
+     CairoPlot.dot_line_plot(options.chartname, use_data, x_size, y_size, background = (204,204,204), border = 0,
+                             axis = True, grid = True, dots = False, h_labels = h_labs)#, v_labels = v_labs)
 
 if __name__ == "__main__":
      main()
