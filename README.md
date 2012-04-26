@@ -8,7 +8,7 @@ Installation
 
 deploy config file is ./deploy/detail/deploy.conf
 
-$ cd deploy
+$ cd deploy-rc
 $ ./autodeploy.sh
 
 this will install catcher.py to the host:/path you defined in ./deploy/detail/deploy.conf
