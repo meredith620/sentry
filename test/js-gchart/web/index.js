@@ -8,8 +8,17 @@ var handler={};
 function info(response,param){
 	console.log(param);
 	if(param.type==='cpu'){
-		console.log(JSON.stringify(cpu_info));
+		//console.log(JSON.stringify(cpu_info));
 		response.write(JSON.stringify(cpu_info));
+		response.end();
+	}else if(param.type==='mem'){
+		response.write(JSON.stringify(mem_info));
+		response.end();
+	}else if(param.type==='disk'){
+		response.write(JSON.stringify(disk_info));
+		response.end();
+	}else if(param.type==='net'){
+		response.write(JSON.stringify(net_info));
 		response.end();
 	}else{
 		response.end('show what?');

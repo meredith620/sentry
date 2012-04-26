@@ -7,47 +7,225 @@
       google.setOnLoadCallback(drawChart);
       function drawChart() {
 
-		var json_data=$.ajax({
+		var cpu_raw=$.ajax({
 			url:'info?type=cpu',
 			dataType:'json',
 			async:false
 		}).responseText;
 
-		var tmp='[["2012-04-23T16:01:00.000Z",0.09,0.00,0.12,0.43,99.3],["2012-04-23T16:02:00.000Z",0.07,0.00,0.00,0.40,99.53],["2012-04-23T16:03:00.000Z",0.05,0.00,0.01,0.52,99.41],["2012-04-23T16:04:00.000Z",0.05,0.00,0.02,0.36,99.56],["2012-04-23T16:05:00.000Z",0.04,0.00,0.01,0.10,99.85]]';
+		var mem_raw=$.ajax({
+			url:'info?type=mem',
+			dataType:'json',
+			async:false
+		}).responseText;
 
-		var show_data=JSON.parse(json_data);
-		for(index in show_data){
-			show_data[index][0]=new Date(show_data[index][0]);
-			//alert(show_data[index]);
-			
-			show_data[index][1]=Number(show_data[index][1]);
-			show_data[index][2]=Number(show_data[index][2]);
-			show_data[index][3]=Number(show_data[index][3]);
-			show_data[index][4]=Number(show_data[index][4]);
-			show_data[index][5]=Number(show_data[index][5]);
-			console.log(show_data[index]);
-			
+		var disk_raw=$.ajax({
+			url:'info?type=disk',
+			dataType:'json',
+			async:false
+		}).responseText;
+
+		var net_raw=$.ajax({
+			url:'info?type=net',
+			dataType:'json',
+			async:false
+		}).responseText;
+
+		//for cpu
+		var cpu_raw=JSON.parse(cpu_raw);
+		for(index in cpu_raw){
+			cpu_raw[index][0]=new Date(cpu_raw[index][0]);
+			cpu_raw[index][1]=Number(cpu_raw[index][1]);
+			cpu_raw[index][2]=Number(cpu_raw[index][2]);
+			cpu_raw[index][3]=Number(cpu_raw[index][3]);
+			cpu_raw[index][4]=Number(cpu_raw[index][4]);
+			cpu_raw[index][5]=Number(cpu_raw[index][5]);
+			//console.log(cpu_raw[index]);
 		}
 
-        var data = new google.visualization.DataTable();
-        data.addColumn('date', 'Date');
-        data.addColumn('number', '%user');
-        data.addColumn('number', '%nice');
-        data.addColumn('number', '%system');
-        data.addColumn('number', '%iowait');
-        data.addColumn('number', '%idle');
+        var cpu_data = new google.visualization.DataTable();
+        cpu_data.addColumn('date', 'Date');
+        cpu_data.addColumn('number', '%user');
+        cpu_data.addColumn('number', '%nice');
+        cpu_data.addColumn('number', '%system');
+        cpu_data.addColumn('number', '%iowait');
+        cpu_data.addColumn('number', '%idle');
+        cpu_data.addRows(cpu_raw);
 
-		
-        data.addRows(show_data);
+        var cpu_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('cpu_chart'));
+        cpu_chart.draw(cpu_data, {displayAnnotations: true});
 
-        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
-        chart.draw(data, {displayAnnotations: true});
+
+		//for mem
+		var mem_raw=JSON.parse(mem_raw);
+		for(index in mem_raw){
+			mem_raw[index][0]=new Date(mem_raw[index][0]);
+			mem_raw[index][1]=Number(mem_raw[index][1]);
+			mem_raw[index][2]=Number(mem_raw[index][2]);
+			mem_raw[index][3]=Number(mem_raw[index][3]);
+			mem_raw[index][4]=Number(mem_raw[index][4]);
+			mem_raw[index][5]=Number(mem_raw[index][5]);
+			//console.log(cpu_raw[index]);
+		}
+		//console.log(mem_raw);
+
+        var mem_data = new google.visualization.DataTable();
+        mem_data.addColumn('date', 'Date');
+        mem_data.addColumn('number', 'total(MB)');
+        mem_data.addColumn('number', 'free(MB)');
+        mem_data.addColumn('number', 'used(MB)');
+        mem_data.addColumn('number', 'free(+buffer)');
+        mem_data.addColumn('number', 'used(-buffer)');
+        mem_data.addRows(mem_raw);
+
+        var mem_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('mem_chart'));
+        mem_chart.draw(mem_data, {displayAnnotations: true});
+
+		//for disk
+		var disk_raw=JSON.parse(disk_raw);
+		var disk_tps_raw=[];
+		var disk_rw_raw=[];
+		var disk_util_raw=[];
+		var disk_other_raw=[];
+
+		for(index in disk_raw){
+			//disk_tps_raw[index][0]=disk_rw_raw[index][0]=disk_util_raw[index][0]=disk_other_raw[index][0]
+			//console.log(disk_raw[index]);
+			disk_tps_raw[index]=new Array();
+			disk_rw_raw[index]=new Array();
+			disk_util_raw[index]=new Array();
+			disk_other_raw[index]=new Array();
+
+			disk_tps_raw[index][0]=new Date(disk_raw[index][0]);
+			disk_rw_raw[index][0]=new Date(disk_raw[index][0]);
+			disk_util_raw[index][0]=new Date(disk_raw[index][0]);
+			disk_other_raw[index][0]=new Date(disk_raw[index][0]);
+
+			disk_tps_raw[index][1]=Number(disk_raw[index][1]);
+
+			disk_rw_raw[index][1]=Number(disk_raw[index][2]);
+			disk_rw_raw[index][2]=Number(disk_raw[index][3]);
+
+			disk_util_raw[index][1]=Number(disk_raw[index][7]);
+
+			disk_other_raw[index][1]=Number(disk_raw[index][4]);
+			disk_other_raw[index][2]=Number(disk_raw[index][5]);
+			disk_other_raw[index][3]=Number(disk_raw[index][6]);
+			//console.log(disk_tps_raw[index]);
+		}
+		//console.log(disk_tps_raw);
+		//console.log(disk_rw_raw);
+		//console.log(disk_util_raw);
+		//console.log(disk_other_raw);
+
+        var disk_tps_data = new google.visualization.DataTable();
+        var disk_rw_data = new google.visualization.DataTable();
+        var disk_util_data = new google.visualization.DataTable();
+        var disk_other_data = new google.visualization.DataTable();
+
+        disk_tps_data.addColumn('date', 'Date');
+        disk_tps_data.addColumn('number', 'tps');
+
+        disk_rw_data.addColumn('date', 'Date');
+        disk_rw_data.addColumn('number', 'read(MB/s)');
+        disk_rw_data.addColumn('number', 'write(MB/s)');
+
+        disk_util_data.addColumn('date', 'Date');
+        disk_util_data.addColumn('number', '%util');
+
+        disk_other_data.addColumn('date', 'Date');
+        disk_other_data.addColumn('number', 'avgrq-sz(sector/request)');
+        disk_other_data.addColumn('number', 'await(ms)');
+        disk_other_data.addColumn('number', 'svctm(ms)');
+
+        disk_tps_data.addRows(disk_tps_raw);
+        disk_rw_data.addRows(disk_rw_raw);
+        disk_util_data.addRows(disk_util_raw);
+        disk_other_data.addRows(disk_other_raw);
+
+        var disk_tps_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_tps_chart'));
+        disk_tps_chart.draw(disk_tps_data, {displayAnnotations: true});
+
+        var disk_rw_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_rw_chart'));
+        disk_rw_chart.draw(disk_rw_data, {displayAnnotations: true});
+
+        var disk_util_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_util_chart'));
+        disk_util_chart.draw(disk_util_data, {displayAnnotations: true});
+
+        var disk_other_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_other_chart'));
+        disk_other_chart.draw(disk_other_data, {displayAnnotations: true});
+
+		//for net
+		var net_raw=JSON.parse(net_raw);
+		var net_io_raw=[],net_drop_raw=[];
+		for(index in net_raw){
+			net_io_raw[index]=[];
+			net_drop_raw[index]=[];		
+			net_io_raw[index][0]=new Date(net_raw[index][0]);
+			net_drop_raw[index][0]=new Date(net_raw[index][0]);
+
+			net_io_raw[index][1]=Number(net_raw[index][1]);
+			net_io_raw[index][2]=Number(net_raw[index][2]);
+			net_io_raw[index][3]=Number(net_raw[index][5]);
+			net_io_raw[index][4]=Number(net_raw[index][6]);
+			net_io_raw[index][5]=Number(net_raw[index][9]);
+			net_io_raw[index][6]=Number(net_raw[index][10]);
+
+			net_drop_raw[index][1]=Number(net_raw[index][3]);
+			net_drop_raw[index][2]=Number(net_raw[index][4]);
+			net_drop_raw[index][3]=Number(net_raw[index][7]);
+			net_drop_raw[index][4]=Number(net_raw[index][8]);
+			net_drop_raw[index][5]=Number(net_raw[index][11]);
+			net_drop_raw[index][6]=Number(net_raw[index][12]);
+
+		}
+
+        var net_io_data = new google.visualization.DataTable();
+        net_io_data.addColumn('date', 'Date');
+        net_io_data.addColumn('number', 'lo:in(MB)');
+        net_io_data.addColumn('number', 'lo:out(MB)');
+        net_io_data.addColumn('number', 'eth0:in(MB)');
+        net_io_data.addColumn('number', 'eth0:out(MB)');
+        net_io_data.addColumn('number', 'eth1:in(MB)');
+        net_io_data.addColumn('number', 'eth1:out(MB)');
+        net_io_data.addRows(net_io_raw);
+
+        var net_io_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('net_io_chart'));
+        net_io_chart.draw(net_io_data, {displayAnnotations: true});
+
+        var net_drop_data = new google.visualization.DataTable();
+        net_drop_data.addColumn('date', 'Date');
+        net_drop_data.addColumn('number', 'lo:indrop(packet/s)');
+        net_drop_data.addColumn('number', 'lo:outdrop');
+        net_drop_data.addColumn('number', 'eth0:indrop');
+        net_drop_data.addColumn('number', 'eth0:outdrop');
+        net_drop_data.addColumn('number', 'eth1:indrop');
+        net_drop_data.addColumn('number', 'eth1:outdrop');
+        net_drop_data.addRows(net_drop_raw);
+
+        var net_drop_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('net_drop_chart'));
+        net_drop_chart.draw(net_drop_data, {displayAnnotations: true});
       }
     </script>
   </head>
 
   <body>
-    // Note how you must specify the size of the container element explicitly!
-    <div id='chart_div' style='width: 700px; height: 240px;'></div>
+    
+	cpu chart
+    <div id='cpu_chart' style='width: 700px; height: 240px;'></div>
+	mem chart
+    <div id='mem_chart' style='width: 700px; height: 240px;'></div>
+	disk tps chart
+    <div id='disk_tps_chart' style='width: 700px; height: 240px;'></div>
+	disk read/write chart
+    <div id='disk_rw_chart' style='width: 700px; height: 240px;'></div>
+	disk util chart
+    <div id='disk_util_chart' style='width: 700px; height: 240px;'></div>
+	disk other chart
+    <div id='disk_other_chart' style='width: 700px; height: 240px;'></div>
+	net io chart
+    <div id='net_io_chart' style='width: 700px; height: 240px;'></div>
+	net drop chart
+    <div id='net_drop_chart' style='width: 700px; height: 240px;'></div>
   </body>
 </html>
