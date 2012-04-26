@@ -1,5 +1,12 @@
 <html>
   <head>
+  	<style type='text/css'>
+	<!--
+		body{
+			background-color:#F5FFFA
+		}
+	-->
+	</style>
     <script type='text/javascript' src='http://www.google.com/jsapi'></script>
     <script type='text/javascript' src='jquery-1.7.2.min.js'></script>
     <script type='text/javascript'>
@@ -53,7 +60,7 @@
         cpu_data.addRows(cpu_raw);
 
         var cpu_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('cpu_chart'));
-        cpu_chart.draw(cpu_data, {displayAnnotations: true});
+        cpu_chart.draw(cpu_data, {'displayAnnotations': true,'thickness':1});
 
 
 		//for mem
@@ -144,13 +151,13 @@
         disk_other_data.addRows(disk_other_raw);
 
         var disk_tps_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_tps_chart'));
-        disk_tps_chart.draw(disk_tps_data, {displayAnnotations: true});
+        disk_tps_chart.draw(disk_tps_data, {'displayAnnotations': true,'thickness':1});
 
         var disk_rw_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_rw_chart'));
-        disk_rw_chart.draw(disk_rw_data, {displayAnnotations: true});
+        disk_rw_chart.draw(disk_rw_data, {'displayAnnotations': true,'thickness':1});
 
         var disk_util_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_util_chart'));
-        disk_util_chart.draw(disk_util_data, {displayAnnotations: true});
+        disk_util_chart.draw(disk_util_data, {'displayAnnotations': true,'thickness':1});
 
         var disk_other_chart = new google.visualization.AnnotatedTimeLine(document.getElementById('disk_other_chart'));
         disk_other_chart.draw(disk_other_data, {displayAnnotations: true});
