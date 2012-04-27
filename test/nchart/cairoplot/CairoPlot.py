@@ -332,14 +332,14 @@ class DotLinePlot(Plot):
         #FIXME: implement this
         for num,key in enumerate(self.series_labels):
             #add by lvliang
-            print("pass %s - y->%d " % (key, self.data[num][-1]))
+            print("pass %s - y->%d dots - last of y->%d" % (key, len(self.data[num]), self.data[num][-1]))
             y0 = self.borders[VERT]
             plot_height = self.height - 2 * self.borders[VERT]
             series_amplitude = self.bounds[VERT][1] - self.bounds[VERT][0]
             vertical_step = float (plot_height) / series_amplitude
-            print("vs: %f" % vertical_step)
+            print("vertical step: %f" % vertical_step)
             self.context.set_source_rgb(*self.series_colors[num])
-            self.context.move_to(self.width-40, y0 + (series_amplitude - self.data[num][-1])*vertical_step)
+            self.context.move_to(self.width-40, y0 + (series_amplitude - self.data[num][-1])*vertical_step - 30)
             self.context.show_text(key)
             #end add
             pass

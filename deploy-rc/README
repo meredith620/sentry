@@ -1,0 +1,5 @@
+deploy system
+=============
+
+* this deploy system concentrate on deploy between machines.
+* so you just writing the template Makefile which will do installation on local machine is enough

@@ -1,0 +1,26 @@
+<html>
+<head>
+<script type='text/script'>
+	var json_data=$.ajax({
+		url:'/node_list',
+		dataType:'json',
+		async:false
+	}).responseText;
+
+	var div=document.getElementById('nodelist_div');
+	div.innerHTML=json_data;
+	
+	
+	
+</script>
+</head>
+
+<body>
+	node in sentry<br/>
+	<div id='nodelist_div'></div>
+	<form action='/node_add' method='post'>
+		server address:<br/><input type="text" name="host"/><br/>
+		<input type="submit" value="add new server"/>
+	</form>
+</body>
+</html>
