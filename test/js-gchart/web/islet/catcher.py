@@ -32,6 +32,7 @@ class Catcher:
 			self.date=cur_date
 			self.file=open(self.date+'.sty','a')
 			self.file.write('\t'.join(self.head)+'\n')
+			self.file.flush()
 
 	def cpustat(self,cpu):
 		cells=cpu.split()
@@ -85,6 +86,7 @@ class Catcher:
 		stat.append(self.netstat(raw[11],raw[5]))
 		stat.append(self.netstat(raw[12],raw[6]))
 		self.file.write('\t'.join(stat)+'\n')
+		self.file.flush()
 		self.daycheck()
 
 	def loop(self):
