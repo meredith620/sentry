@@ -1,16 +1,16 @@
 var fs=require('fs');
 
-global.cpu_info=[];
-global.mem_info=[];
-global.disk_info=[];
-global.net_info=[];
 
-function load_data(filename,cb){
+function load_data(filename,ecb,cb){
 	fs.readFile(filename,'ascii',function(err,data){
 		if(err){
-			throw err;
+			ecb(err);
 		}
 		console.log('read finish');
+		var cpu_info=[];
+		var mem_info=[];
+		var disk_info=[];
+		var net_info=[];
 		var lines=data.split("\n");
 		//console.log(lines[1]);
 		for(var i=1;i<lines.length-1;i++){//skip last line
@@ -25,7 +25,12 @@ function load_data(filename,cb){
 			}
 		}
 		if(cb){
-			cb();
+			var data={};
+			data['cpu']=cpu_info;
+			data['mem']=mem_info;
+			data['disk']=disk_info;
+			data['net']=net_info;
+			cb(data);
 		}else{
 			console.log(cpu_info);
 		}

@@ -15,16 +15,20 @@ function init_node(cb){
 			throw err;
 		}
 		global.node=files;
+		console.log('node:');
 		console.log(files);
+		fetch_data();
 		cb();
 	});
-	fetch_data();
 }
 
 function fetch_data(){
-	int count=global.node.length;
+	var count=global.node.length;
+	console.log('fetch');
+	console.log(count);
 	global.node.forEach(function(value,index){
-		var cmd='rync '+value+':~/islet/*.sty node_root/'+value+'/';
+		var cmd='rsync '+value+':~/islet/*.sty node_root/'+value+'/';
+		console.log('fetch '+cmd);
 		cp.exec(cmd,function(err,stdout,stderr){
 			if(err){
 				throw err;
@@ -88,22 +92,16 @@ var handler={};
 function info(response,param){
 	console.log(param);
 	//TODO change this to send a host's oneday info,change show.html to select which node ,maybe show current date is ok
-	if(param.type==='cpu'){
-		//console.log(JSON.stringify(cpu_info));
-		response.write(JSON.stringify(cpu_info));
+	var file=node_root+'/'+param.host+'/'+param.date+'.sty';
+	function ecb(err){
 		response.end();
-	}else if(param.type==='mem'){
-		response.write(JSON.stringify(mem_info));
-		response.end();
-	}else if(param.type==='disk'){
-		response.write(JSON.stringify(disk_info));
-		response.end();
-	}else if(param.type==='net'){
-		response.write(JSON.stringify(net_info));
-		response.end();
-	}else{
-		response.end('show what?');
+		console.log(err);
+		throw err;
 	}
+	function cb(data){
+		response.end(JSON.stringify(data));
+	}
+	ds.load_data(file,ecb,cb);
 }
 
 function render(response,file){
@@ -124,11 +122,7 @@ function route(pathname,response,get,post){
 	}else if(pathname.match(".js")){
 		render(response,pathname.slice(1));
 	}else if(typeof handler[pathname] ==='function'){
-		if(pathname==='info'){
-			handler[pathname](response,querystring.parse(get));
-		}else{
-			handler[pathname](response,querystring.parse(post));
-		}
+		handler[pathname](response,querystring.parse(post));
 	}else{
 		response.end('not found');
 		console.log('unknow url:'+pathname);
@@ -153,7 +147,6 @@ function start(){
 handler['/info']=info;
 handler['/node_list']=node_list;
 handler['/node_add']=node_add;
-
 
 init_node(start);
 /*
