@@ -7,20 +7,50 @@
 		dataType:'json',
 		async:false
 	}).responseText;
-	
+	//for test
+	//json_data='["node1","node2","node3"]';
 </script>
 </head>
 
 <body>
-	node in sentry<br/>
-	<div id="nodelist_div" name='nodelist_div'>what</div>
+	<p style='font-size:150%'>create new node</p>
 	<form action='/node_add' method='post'>
-		server address:<br/><input type="text" name="host"/><br/>
-		<input type="submit" value="add new server"/>
+		node address:
+		<input type="text" name="host"/>
+		<input type="submit" value="add new node"/>
 	</form>
+	<hr>
+	<p style='font-size:150%'>node in sentry</p>
+	<div id="nodelist_div" name='nodelist_div'>what</div>
 </body>
 <script type='text/javascript'>
 	console.log(json_data);
-	document.getElementById('nodelist_div').innerHTML=json_data;
+	console.log(JSON.parse(json_data));
+	document.getElementById('nodelist_div').innerHTML=draw_node_list(JSON.parse(json_data));
+	function show(arg){
+		console.log(arg.id);
+		//TODO implement show
+	}
+	//@node_list a node array
+	//@return a html table of list
+	function draw_node_list(node_list){
+		console.log(node_list);
+		var table='<table border="1" align="left" width="50%" >';
+		for (i in node_list){
+			table+='<tr>';
+			table+='<td>';
+			table+=node_list[i];
+			table+='</td>';
+
+			table+='<td><a href="javascript:void(0);" onclick="show(this)" id="'
+			table+=node_list[i]+'">';
+			table+='view'
+			table+='</a></td>';
+
+			table+='</tr>';
+		}
+		table+='</table>';
+		return table;
+	};
 </script>
 </html>

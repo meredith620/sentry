@@ -52,12 +52,18 @@ function node_add(response,param){
 		response.end();
 		return;
 	}
-	if(param.host in global.node){
+	console.log(global.node);
+	console.log(param.host);
+	if(global.node.indexOf(param.host)!=-1){
+		response.statusCode=301;
+		response.setHeader('Location','/all.html');
 		response.end('already deployed');
 		return;
 	}
 	deploy_islet(param.host,function(){
 		global.node.push(param.host);
+		response.statusCode=301;
+		response.setHeader('Location','/all.html');
 		response.end('add server success');
 	});
 }
