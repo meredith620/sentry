@@ -12,3 +12,4 @@ $ cd deploy-rc
 $ ./autodeploy.sh
 
 this will install catcher.py to the host:/path you defined in ./deploy/detail/deploy.conf
+
