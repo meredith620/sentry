@@ -153,6 +153,9 @@ function start(){
 handler['/info']=info;
 handler['/node_list']=node_list;
 handler['/node_add']=node_add;
+handler['/node_detail']=function(response,param){
+	response.end(JSON.stringify(param));
+};
 
 init_node(start);
 /*

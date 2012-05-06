@@ -21,7 +21,14 @@
 	</form>
 	<hr>
 	<p style='font-size:150%'>node in sentry</p>
-	<div id="nodelist_div" name='nodelist_div'>what</div>
+	<div id="nodelist_div" name='nodelist_div'>
+		<table border='1' width='50%' >
+			<tr><td align='center'>please add a new node!</td></tr>
+		</table>
+	</div>
+	<form action='/node_detail' method='post' id='view_form'>
+		<input type='hidden' name='host' id='view_host' />
+	</form>
 </body>
 <script type='text/javascript'>
 	console.log(json_data);
@@ -29,7 +36,8 @@
 	document.getElementById('nodelist_div').innerHTML=draw_node_list(JSON.parse(json_data));
 	function show(arg){
 		console.log(arg.id);
-		//TODO implement show
+		document.getElementById('view_host').value=arg.id;
+		document.getElementById('view_form').submit();
 	}
 	//@node_list a node array
 	//@return a html table of list
