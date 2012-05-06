@@ -1,7 +1,34 @@
 var fs=require('fs');
 
+function load_data(param,ecb,cb){
+	fs.readdir(global.node_root+'/'+host,function(err,files){
+		if(err){
+			ecb(err);
+		}
+		var res=[];
+		var count=0;
+		files.filter(function(v){
+			var time=Number(v.substr(0,8));
+			return (Number(param.start)<=time&&time<=Number(param.end));
+		}).map(function(v,i){
+			count++;
+			fs.readFile(global.node_root+'/'+host+'/'+v+'.sty','ascii',function(err,data){
+					if(err){
+						ecb(err);
+					}
+					res[i]=data
+					count--;
+					if(count<=0){
+						//TODO process res[],then call cb(data)
+					}
+				}
+			});
+		});
+		
+	}
+}
 
-function load_data(filename,ecb,cb){
+function load_data2(filename,ecb,cb){
 	fs.readFile(filename,'ascii',function(err,data){
 		if(err){
 			ecb(err);

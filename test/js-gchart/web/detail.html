@@ -1,0 +1,199 @@
+<html>
+  <head>
+  	<style type='text/css'>
+	<!--
+		body{
+			background-color: #EFEFEF
+			background-image: url(http://slidesjs.com/examples/images-with-captions/img/background.png)
+		}
+		body a{
+			padding-top: 0px;
+			padding-right: 5px;
+			padding-bottom: 0px;
+			padding-left: 0px
+		}
+
+	-->
+	</style>
+    <script type='text/javascript' src='http://www.google.com/jsapi'></script>
+    <script type='text/javascript' src='jquery-1.7.2.min.js'></script>
+    <script type='text/javascript'>
+	google.load('visualization', '1', {'packages':['annotatedtimeline']});
+	google.setOnLoadCallback(function(){
+		console.log('google load finish');
+	});
+	/*
+	 * @data matrix [[new Date(),Number,Number,Number],[...],[...],...]
+	 * @label array [time,label1,label2,label3]
+	**/
+	function draw_chart(data,label,div_id){
+		var gtable=new google.visualization.DataTable();
+		gtable.addColumn('datetime',label.shift());
+		for (i in label){
+			gtable.addColumn('number',label[i]);
+		}
+		//console.log(data);
+		gtable.addRows(data);
+		var gchart=new google.visualization.AnnotatedTimeLine(document.getElementById(div_id));
+		gchart.draw(gtable,{
+			'displayAnnotations':true,
+			'thickness':1,
+			'legendPosition':'newRow'
+		});
+	}
+
+	function test_draw_chart(){
+		var div_list=['cpu_chart','mem_chart','disk_tps_chart'];
+		for (i in div_list){
+			var data=[ [new Date('2012-04-24 00:01'), 30000,  40645, ], [new Date('2012-04-24 00:02'), 14045,  20374, ], [new Date('2012-04-24 00:03'), 55022,  50766, ], [new Date('2012-04-24 00:04'), 75284,  14334, ], [new Date('2012-04-24 00:05'), 41476,  66467, ], [new Date('2012-04-24 00:06'), 33322,  39463, ] ];
+			var label=['time','a','b'];
+			draw_chart(data,label,div_list[i]);
+		}
+	}
+	/**
+	 * @raw json data for ajax response
+	 */
+	function process_data(raw){
+		for(key in raw){
+			for(i in raw[key]){
+				for(j in raw[key][i]){
+					if(j==0){
+						raw[key][i][j]=new Date(raw[key][i][j]);
+					}else{
+						raw[key][i][j]=Number(raw[key][i][j]);
+					}
+				}
+			}
+		}
+		var cpu=raw.cpu;
+		//console.log(raw);
+		var cpu_label=[ 'Time', '%user', '%nice',
+			'%system', '%iowait', '%idle' ];
+		draw_chart(cpu,cpu_label,'cpu_chart');
+
+		var mem=raw.mem;
+		var mem_label=[ 'Time', 'total(MB)', 'free(MB)',
+			'used(MB)', 'free(+b&c)', 'used(-b&c)' ];
+		draw_chart(mem,mem_label,'mem_chart');
+
+			
+		var disk=raw.disk;
+		var disk_label=['Time','tps','read(MB/s)','write(MB/s)',
+			'avgrq-sz(sector/request)','await(ms)','svmtm(ms)',
+			'%util'];
+		var disk_meta={ 'tps':[0,1], 'rw':[0,2,3],
+			'util':[0,7], 'other':[0,4,5,6] };
+		function get_data(targets){
+			return function(v){
+				return v.filter(function (vv,ii){
+					return (targets.indexOf(ii)!=-1);
+				});
+			};
+		}
+		for(key in disk_meta){
+			draw_chart(disk.map(get_data(disk_meta[key])),
+				disk_label.filter(function (v,i){
+					return (disk_meta[key].indexOf(i)!=-1);
+				}),
+				'disk_'+key+'_chart');
+		}
+
+		var net=raw.net;
+		var net_label=['Time','lo:in(MB/s)','lo:out(MB/s)','lo:indrop(packets/s)','lo:outdrop',
+		'eth0:in(MB/s)','eth0:out(MB/s)','eth0:indrop','eth0:outdrop',
+		'eth1:in(MB/s)','eth1:out(MB/s)','eth1:indrop','eth1:outdrop'];
+		var net_meta={ io:[0,1,2,5,6,9,10],drop:[0,3,4,7,8,11,12] };
+		for(key in net_meta){
+			draw_chart(net.map(get_data(net_meta[key])),
+				net_label.filter(function (v,i){
+					return (net_meta[key].indexOf(i)!=-1);
+				}),
+				'net_'+key+'_chart');
+		}
+
+		set_visible(document.getElementById('first_tab'));
+	}
+
+	function refresh(){
+		console.log('refresh');
+		var param={};
+		param['host']=document.getElementById('view_host').value;
+		param['start']=document.getElementById('view_start').value;
+		param['end']=document.getElementById('view_end').value;
+
+		console.log(param);
+		console.log('send request');
+		//test_draw_chart();
+		/*var test_data={"cpu":[["2012-05-07 00:01","0.01","0.00","0.04","0.00","99.95"],["2012-05-07 00:02","0.06","0.00","0.04","0.46","99.44"],["2012-05-07 00:03","0.06","0.00","0.03","0.40","99.51"],["2012-05-07 00:04","0.06","0.00","0.03","0.76","99.15"]],"mem":[["2012-05-07 00:01","32949.936","159.96","32789.976","31539.804","1410.132"],["2012-05-07 00:02","32949.936","159.52","32790.416","31539.924","1410.012"],["2012-05-07 00:03","32949.936","158.868","32791.068","31539.46","1410.476"],["2012-05-07 00:04","32949.936","158.248","32791.688","31538.888","1411.048"]],"disk":[["2012-05-07 00:01","0.40","0.0","0.002001953125","0.0050048828125","0.000244140625","0.0001220703125","4.8828125e-06"],["2012-05-07 00:02","8.20","1.0","0.001171875","0.122094726563","0.006650390625","0.004853515625","0.0039794921875"],["2012-05-07 00:03","8.00","1.0","0.0","0.125","0.006474609375","0.0047265625","0.003779296875"],["2012-05-07 00:04","7.80","0.975","0.0","0.125","0.0106982421875","0.0086962890625","0.0067822265625"]],"net":[["2012-05-07 00:01","0.0","0.0","356.70","0.00","0.0","0.0","691.20","0.00","0.0","0.0","20.40","0.00"],["2012-05-07 00:02","0.0","0.0","356.70","0.00","0.0","0.0","691.20","0.00","0.0","0.0","20.40","0.00"],["2012-05-07 00:03","0.0","0.0","356.70","0.00","0.0","0.0","691.20","0.00","0.0","0.0","20.40","0.00"],["2012-05-07 00:04","0.0","0.0","356.70","0.00","0.0","0.0","691.20","0.00","0.0","0.0","20.40","0.00"]]};
+		process_data(test_data);
+		*/
+
+		
+		$.ajax({
+		type:'POST',
+		data:param,
+		url:'/info',
+		dataType:'json',
+		success:process_data,
+		});
+	
+	}
+    </script>
+    <script type='text/javascript'>
+		function set_visible(a){
+			console.log(a.innerHTML);
+			var tab_list=['cpu','mem','disk','net'];
+			for (i in tab_list){
+				document.getElementById(tab_list[i]+'_tab').style.display='none';
+			}
+			document.getElementById(a.innerHTML+'_tab').style.display='inline';
+		}
+    </script>
+  </head>
+
+  <body>
+	__HOST__
+	<hr>
+  	<form >
+		<input type='hidden' name='host' id='view_host' value='__HOST__'><br/>
+		start:<input type='text' name='start' id='view_start'>
+		end:<input type='text' name='end' id='view_end'>
+		<input type='button' value='view' onclick='refresh();' >
+	</form>
+	<br>
+	<a id='first_tab' href='javascript:void(0);' onclick='set_visible(this)'>cpu</a>|
+	<a href='javascript:void(0);' onclick='set_visible(this)'>mem</a>|
+	<a href='javascript:void(0);' onclick='set_visible(this)'>disk</a>|
+	<a href='javascript:void(0);' onclick='set_visible(this)'>net</a>
+	<hr>
+    <table align='center'><tr><td align='center'>
+	<div id='cpu_tab'>
+		cpu chart
+		<div id='cpu_chart' style='width: 700px; height: 240px;' >cpu</div>
+	</div>
+	<div id='mem_tab'>
+		mem chart
+		<div id='mem_chart' style='width: 700px; height: 240px;'>mem</div>
+	</div>
+	<div id='disk_tab'>
+		disk tps chart
+		<div id='disk_tps_chart' style='width: 700px; height: 240px; '>disk</div>
+		disk read/write chart
+		<div id='disk_rw_chart' style='width: 700px; height: 240px; '>disk</div>
+		disk util chart
+		<div id='disk_util_chart' style='width: 700px; height: 240px; '>disk</div>
+		disk other chart
+		<div id='disk_other_chart' style='width: 700px; height: 240px; '></div>
+	</div>
+	<div id='net_tab'>
+		net io chart
+		<div id='net_io_chart' style='width: 700px; height: 240px; '></div>
+		net drop chart
+		<div id='net_drop_chart' style='width: 700px; height: 240px; '></div>
+	</div>
+	</td></tr></table>
+  </body>
+  <script>
+	refresh();
+  </script>
+</html>

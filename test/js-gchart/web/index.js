@@ -8,6 +8,7 @@ var cp=require('child_process');
 //TODO grantee node_root exist
 global.node_root='./node_root';
 global.node=[];
+var handler={};
 
 function init_node(cb){
 	fs.readdir(node_root,function(err,files){
@@ -17,7 +18,8 @@ function init_node(cb){
 		global.node=files;
 		console.log('node:');
 		console.log(files);
-		fetch_data();
+		//TODO show open it
+		//fetch_data();
 		cb();
 	});
 }
@@ -93,12 +95,18 @@ function deploy_islet(host,cb){
 }
 
 
-var handler={};
 
 function info(response,param){
 	console.log(param);
-	//TODO change this to send a host's oneday info,change show.html to select which node ,maybe show current date is ok
-	var file=node_root+'/'+param.host+'/'+param.date+'.sty';
+	var today=new Date();
+	if(!/\d{8}/.test(param.end)){
+		param.end=String(today.getFullYear())+(today.getMonth()+1)+today.getDate();
+	}
+	if(!/\d{8}/.test(param.start)){
+		param.start=String(today.getFullYear())+(today.getMonth()+1)+today.getDate();
+	}
+	console.log(param);
+	
 	function ecb(err){
 		response.end();
 		console.log(err);
@@ -106,8 +114,9 @@ function info(response,param){
 	}
 	function cb(data){
 		response.end(JSON.stringify(data));
+		console.log(JSON.stringify(data));
 	}
-	ds.load_data(file,ecb,cb);
+	ds.load_data(param,ecb,cb);
 }
 
 function render(response,file){
@@ -158,8 +167,3 @@ handler['/node_detail']=function(response,param){
 };
 
 init_node(start);
-/*
-init_node(function(){
-	ds.load_data('20120424.sty',start);
-});
-*/
