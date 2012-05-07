@@ -607,6 +607,7 @@
 			
 			this.slidesControl = this.slidesContainer.wrapInner( "<div class='slidesControl'>" ).children().css({
 				//display: "none"
+				display: "block",
 				visibility: 'hidden'
 			});
 			
@@ -628,6 +629,7 @@
 				left: 0,
 				zIndex: 0,
 				//display: "none"
+				display: "block",
 				visibility: 'hidden'
 			});
 
@@ -900,8 +902,9 @@
 				left: type === "vertical" ? 0 : position,
 				top:  type === "vertical" ? position : 0,
 				zIndex: 5,
-				display: "block"
-				//visibility: 'visible'
+				//display: "block"
+				display: "block",
+				visibility: 'visible'
 			});
 			
 			// animate control
@@ -925,8 +928,9 @@
 				navigateData.currentSlide.css({
 					top: 0,
 					left:0,
-					display: "none",
-					//visibility: 'hidden',
+					//display: "none",
+					display: "block",
+					visibility: 'hidden',
 					zIndex: 0
 				});
 				
@@ -945,8 +949,9 @@
 				
 						// hide previous
 						navigateData.currentSlide.css({
-							display: "none",
-							//visibility: 'hidden',
+							//display: "none",
+							display: "block",
+							visibility: 'hidden',
 							zIndex: 0
 						});								
 							

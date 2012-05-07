@@ -124,7 +124,7 @@ function info(response,param){
 	}
 	function cb(data){
 		response.end(JSON.stringify(data));
-		console.log(JSON.stringify(data));
+		//console.log(JSON.stringify(data));
 	}
 	ds.load_data(param,ecb,cb);
 }
