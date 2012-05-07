@@ -18,8 +18,7 @@ function init_node(cb){
 		global.node=files;
 		console.log('node:');
 		console.log(files);
-		//TODO show open it
-		//fetch_data();
+		fetch_data();
 		cb();
 	});
 }
@@ -98,12 +97,23 @@ function deploy_islet(host,cb){
 
 function info(response,param){
 	console.log(param);
+	//TODO 
+	param.host='100.mzhen.cn';
 	var today=new Date();
 	if(!/\d{8}/.test(param.end)){
-		param.end=String(today.getFullYear())+(today.getMonth()+1)+today.getDate();
+		param.end=String(today.getFullYear());
+		param.end+=today.getMonth()+1<10?'0':'';
+		param.end+=(today.getMonth()+1);
+		param.end+=today.getDate()<10?'0':'';
+		param.end+=today.getDate();
 	}
 	if(!/\d{8}/.test(param.start)){
-		param.start=String(today.getFullYear())+(today.getMonth()+1)+today.getDate();
+		param.end=String(today.getFullYear());
+		param.end+=today.getMonth()+1<10?'0':'';
+		param.end+=(today.getMonth()+1);
+		param.end+=today.getDate()<10?'0':'';
+		param.end+=today.getDate();
+		param.start=param.end;
 	}
 	console.log(param);
 	

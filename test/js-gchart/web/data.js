@@ -1,9 +1,9 @@
 var fs=require('fs');
-
 function load_data(param,ecb,cb){
-	fs.readdir(global.node_root+'/'+host,function(err,files){
+	fs.readdir(global.node_root+'/'+param.host,function(err,files){
 		if(err){
 			ecb(err);
+			return;
 		}
 		var res=[];
 		var count=0;
@@ -12,59 +12,51 @@ function load_data(param,ecb,cb){
 			return (Number(param.start)<=time&&time<=Number(param.end));
 		}).map(function(v,i){
 			count++;
-			fs.readFile(global.node_root+'/'+host+'/'+v+'.sty','ascii',function(err,data){
-					if(err){
-						ecb(err);
+			fs.readFile(global.node_root+'/'+param.host+'/'+v,'ascii',function(err,data){
+				count--;
+				if(err){
+					console.log(err);
+					return;
+				}
+				res[i]=data;
+				if(count<=0){
+					//process res[],then call cb(info)
+					var info={cpu:[],mem:[],disk:[],net:[]};
+					for (r in res){
+						var lines=res[r].split('\n');
+						var head=lines.shift().split('\t');
+						lines.pop();
+						for(l in lines){
+							var items=lines[l].split('\t');
+							if(items.length!=head.length){
+								continue;
+							}
+							info.cpu.push(items.slice(0,6));
+							var time=[items[0]];
+							info.mem.push(time.concat(items.slice(6,11)));
+							info.disk.push(time.concat(items.slice(11,18)));
+							info.net.push(time.concat(items.slice(18)));
+						}
 					}
-					res[i]=data
-					count--;
-					if(count<=0){
-						//TODO process res[],then call cb(data)
-					}
+					cb(info);
 				}
 			});
 		});
-		
-	}
-}
-
-function load_data2(filename,ecb,cb){
-	fs.readFile(filename,'ascii',function(err,data){
-		if(err){
-			ecb(err);
-		}
-		console.log('read finish');
-		var cpu_info=[];
-		var mem_info=[];
-		var disk_info=[];
-		var net_info=[];
-		var lines=data.split("\n");
-		//console.log(lines[1]);
-		for(var i=1;i<lines.length-1;i++){//skip last line
-			if(lines[i]){
-				items=lines[i].split("\t");
-				//items[0]=new Date(items[0]);
-				cpu_info.push(items.slice(0,6));
-				time=[items[0]];
-				mem_info.push(time.concat(items.slice(6,11)));
-				disk_info.push(time.concat(items.slice(11,18)));
-				net_info.push(time.concat(items.slice(18)));
-			}
-		}
-		if(cb){
-			var data={};
-			data['cpu']=cpu_info;
-			data['mem']=mem_info;
-			data['disk']=disk_info;
-			data['net']=net_info;
-			cb(data);
-		}else{
-			console.log(cpu_info);
-		}
 	});
+		
 }
 
 exports.load_data=load_data;
-
-//load_data('20120424.sty');
-//load_data('xx');
+/* for test
+global.node_root='./node_root'
+load_data({
+	host:'100.mzhen.cn',
+	start:'20120510',
+	end:'20120511'
+},function(err){
+	console.log(err);
+},
+function(info){
+	console.log(info);
+});
+*/

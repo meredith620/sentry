@@ -1,22 +1,39 @@
 <html>
   <head>
-  	<style type='text/css'>
+  	<style type='text/css' media='screen'>
 	<!--
 		body{
-			background-color: #EFEFEF
-			background-image: url(http://slidesjs.com/examples/images-with-captions/img/background.png)
+			background-color: #EFEFEF;
+			background-image: url(http://slidesjs.com/examples/images-with-captions/img/background.png);
 		}
 		body a{
 			padding-top: 0px;
 			padding-right: 5px;
 			padding-bottom: 0px;
-			padding-left: 0px
+			padding-left: 0px;
+		}
+		div.chart_tab{
+			position: absolute;
+			left: 350px;
+			top: 200px;
 		}
 
 	-->
 	</style>
     <script type='text/javascript' src='http://www.google.com/jsapi'></script>
     <script type='text/javascript' src='jquery-1.7.2.min.js'></script>
+	<script src="slides.js"></script>
+
+	<script>
+	/*
+		$(function(){
+			$('#slides').slides({
+				preload:true
+			});
+		});
+	*/
+	</script>
+
     <script type='text/javascript'>
 	google.load('visualization', '1', {'packages':['annotatedtimeline']});
 	google.setOnLoadCallback(function(){
@@ -54,6 +71,7 @@
 	 * @raw json data for ajax response
 	 */
 	function process_data(raw){
+		set_visible();
 		for(key in raw){
 			for(i in raw[key]){
 				for(j in raw[key][i]){
@@ -141,12 +159,14 @@
     </script>
     <script type='text/javascript'>
 		function set_visible(a){
-			console.log(a.innerHTML);
 			var tab_list=['cpu','mem','disk','net'];
 			for (i in tab_list){
-				document.getElementById(tab_list[i]+'_tab').style.display='none';
+				document.getElementById(tab_list[i]+'_tab').style.visibility='hidden';
 			}
-			document.getElementById(a.innerHTML+'_tab').style.display='inline';
+			if(a){
+				console.log(a.innerHTML);
+				document.getElementById(a.innerHTML+'_tab').style.visibility='visible';
+			}
 		}
     </script>
   </head>
@@ -167,29 +187,31 @@
 	<a href='javascript:void(0);' onclick='set_visible(this)'>net</a>
 	<hr>
     <table align='center'><tr><td align='center'>
-	<div id='cpu_tab'>
-		cpu chart
-		<div id='cpu_chart' style='width: 700px; height: 240px;' >cpu</div>
-	</div>
-	<div id='mem_tab'>
-		mem chart
-		<div id='mem_chart' style='width: 700px; height: 240px;'>mem</div>
-	</div>
-	<div id='disk_tab'>
-		disk tps chart
-		<div id='disk_tps_chart' style='width: 700px; height: 240px; '>disk</div>
-		disk read/write chart
-		<div id='disk_rw_chart' style='width: 700px; height: 240px; '>disk</div>
-		disk util chart
-		<div id='disk_util_chart' style='width: 700px; height: 240px; '>disk</div>
-		disk other chart
-		<div id='disk_other_chart' style='width: 700px; height: 240px; '></div>
-	</div>
-	<div id='net_tab'>
-		net io chart
-		<div id='net_io_chart' style='width: 700px; height: 240px; '></div>
-		net drop chart
-		<div id='net_drop_chart' style='width: 700px; height: 240px; '></div>
+	<div id='slides'>
+		<div id='cpu_tab' class='chart_tab' >
+			cpu chart
+			<div id='cpu_chart' style='width: 700px; height: 240px;' >cpu</div>
+		</div>
+		<div id='mem_tab' class='chart_tab' >
+			mem chart
+			<div id='mem_chart' style='width: 700px; height: 240px;'>mem</div>
+		</div>
+		<div id='disk_tab' class='chart_tab' >
+			disk tps chart
+			<div id='disk_tps_chart' style='width: 700px; height: 240px; '>disk</div>
+			disk read/write chart
+			<div id='disk_rw_chart' style='width: 700px; height: 240px; '>disk</div>
+			disk util chart
+			<div id='disk_util_chart' style='width: 700px; height: 240px; '>disk</div>
+			disk other chart
+			<div id='disk_other_chart' style='width: 700px; height: 240px; '></div>
+		</div>
+		<div id='net_tab' class='chart_tab' >
+			net io chart
+			<div id='net_io_chart' style='width: 700px; height: 240px; '></div>
+			net drop chart
+			<div id='net_drop_chart' style='width: 700px; height: 240px; '></div>
+		</div>
 	</div>
 	</td></tr></table>
   </body>
