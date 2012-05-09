@@ -95,5 +95,9 @@ class Catcher:
 			time.sleep(50)
 			
 if __name__=='__main__':
+	f=os.popen('ps -ef|grep catche[r]')
+	former=f.readlines()
+	if len(former)>1:
+		sys.exit(0)
 	catcher=Catcher()
 	catcher.loop()

@@ -33,7 +33,9 @@
 <script type='text/javascript'>
 	console.log(json_data);
 	console.log(JSON.parse(json_data));
-	document.getElementById('nodelist_div').innerHTML=draw_node_list(JSON.parse(json_data));
+	if(JSON.parse(json_data).length!=0){
+		document.getElementById('nodelist_div').innerHTML=draw_node_list(JSON.parse(json_data));
+	}
 	function show(arg){
 		console.log(arg.id);
 		document.getElementById('view_host').value=arg.id;

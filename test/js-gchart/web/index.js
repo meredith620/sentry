@@ -129,13 +129,16 @@ function info(response,param){
 	ds.load_data(param,ecb,cb);
 }
 
-function render(response,file){
+function render(response,file,regex,target){
 	var fs=require('fs');
 	//current use node's fs api,TODO use do.js
 	console.log('read file:'+file);
 	fs.readFile(file,'ascii',function(err,data){
 		if(err){
 			throw err;
+		}
+		if(target && regex){
+			data=data.replace(regex,target)
 		}
 		response.end(data);
 	});
@@ -173,7 +176,7 @@ handler['/info']=info;
 handler['/node_list']=node_list;
 handler['/node_add']=node_add;
 handler['/node_detail']=function(response,param){
-	response.end(JSON.stringify(param));
+	render(response,'detail.html',/__HOST__/g,param.host);
 };
 
 init_node(start);
