@@ -74,6 +74,7 @@
 	 * @raw json data for ajax response
 	 */
 	function process_data(raw){
+		//console.log(raw);
 		for(key in raw){
 			for(i in raw[key]){
 				for(j in raw[key][i]){
@@ -92,8 +93,8 @@
 		draw_chart(cpu,cpu_label,'cpu_chart');
 
 		var mem=raw.mem;
-		var mem_label=[ 'Time', 'total(MB)', 'free(MB)',
-			'used(MB)', 'free(+b&c)', 'used(-b&c)' ];
+		var mem_label=[ 'Time', 'total(GB)', 'free(GB)',
+			'used(GB)', 'free(+b&c)', 'used(-b&c)' ];
 		draw_chart(mem,mem_label,'mem_chart');
 
 			
@@ -119,6 +120,8 @@
 		}
 
 		var net=raw.net;
+		//console.log('net data');
+		//console.log(net);
 		var net_label=['Time','lo:in(MB/s)','lo:out(MB/s)','lo:indrop(packets/s)','lo:outdrop',
 		'eth0:in(MB/s)','eth0:out(MB/s)','eth0:indrop','eth0:outdrop',
 		'eth1:in(MB/s)','eth1:out(MB/s)','eth1:indrop','eth1:outdrop'];

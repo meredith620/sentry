@@ -41,10 +41,10 @@ class Catcher:
 	def memstat(self,mem):
 		cells=[0]
 		mem=mem.split()
-		cells.append(str(float(mem[1])/1000))
-		cells.append(str(float(mem[2])/1000))
-		cells[0]=str(float(mem[1])/1000+float(mem[2])/1000)
-		cached=float(mem[4])/1000+float(mem[5])/1000
+		cells.append(str(float(mem[1])/1000/1000))
+		cells.append(str(float(mem[2])/1000/1000))
+		cells[0]=str(float(mem[1])/1000/1000+float(mem[2])/1000/1000)
+		cached=float(mem[4])/1000/1000+float(mem[5])/1000/1000
 		cells.append(str(float(cells[1])+cached))
 		cells.append(str(float(cells[2])-cached))
 		return '\t'.join(cells)
@@ -56,18 +56,18 @@ class Catcher:
 		cells.append(disk[2])
 		cells.append(str(float(disk[3])*512/1024/1024))
 		cells.append(str(float(disk[4])*512/1024/1024))
-		cells.append(str(float(disk[5])*512/1024/1024))
-		cells.append(str(float(disk[7])*512/1024/1024))
-		cells.append(str(float(disk[8])*512/1024/1024))
-		cells.append(str(float(disk[9])*512/1024/1024))
+		cells.append(str(float(disk[5])*512/1024))
+		cells.append(str(float(disk[7])))
+		cells.append(str(float(disk[8])))
+		cells.append(str(float(disk[9])))
 		return '\t'.join(cells)
 
 	def netstat(self,net,enet):
 		cells=[]
 		net=net.split()
 		enet=enet.split()
-		cells.append(str(float(net[4])/1000))
-		cells.append(str(float(net[5])/1000))
+		cells.append(str(float(net[4])/1000/1000))
+		cells.append(str(float(net[5])/1000/1000))
 		cells.append(enet[5])
 		cells.append(enet[6])
 		return '\t'.join(cells)
@@ -82,9 +82,9 @@ class Catcher:
 		stat.append(self.cpustat(raw[1]))
 		stat.append(self.memstat(raw[23]))
 		stat.append(self.diskstat(raw[19]))
-		stat.append(self.netstat(raw[10],raw[4]))
-		stat.append(self.netstat(raw[11],raw[5]))
-		stat.append(self.netstat(raw[12],raw[6]))
+		stat.append(self.netstat(raw[4],raw[10]))
+		stat.append(self.netstat(raw[5],raw[11]))
+		stat.append(self.netstat(raw[6],raw[12]))
 		self.file.write('\t'.join(stat)+'\n')
 		self.file.flush()
 		self.daycheck()

@@ -97,8 +97,7 @@ function deploy_islet(host,cb){
 
 function info(response,param){
 	console.log(param);
-	//TODO 
-	param.host='100.mzhen.cn';
+	//param.host='100.mzhen.cn';
 	var today=new Date();
 	if(!/\d{8}/.test(param.end)){
 		param.end=String(today.getFullYear());
@@ -176,7 +175,11 @@ handler['/info']=info;
 handler['/node_list']=node_list;
 handler['/node_add']=node_add;
 handler['/node_detail']=function(response,param){
-	render(response,'detail.html',/__HOST__/g,param.host);
+	if(global.node.indexOf(param.host)!=-1){
+		render(response,'detail.html',/__HOST__/g,param.host);
+	}else{
+		response.end('param error');
+	}
 };
 
 init_node(start);
