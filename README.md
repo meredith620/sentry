@@ -8,8 +8,9 @@ Installation
 ============
 
 
-$cd test/js-gchart/web
-$node index.js
+$ cd test/js-gchart/web 
+
+$ node index.js
 
 browser localhost:8091/all.html
 
