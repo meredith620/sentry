@@ -3,13 +3,14 @@ sentry
 
 monitor machine resources like cpu,disk I/O,mem,ethernet... and display the charts
 
+
 Installation
 ============
 
-deploy config file is ./deploy/detail/deploy.conf
 
-$ cd deploy-rc
-$ ./autodeploy.sh
+$cd test/js-gchart/web
+$node index.js
 
-this will install catcher.py to the host:/path you defined in ./deploy/detail/deploy.conf
+browser localhost:8091/all.html
+
 
