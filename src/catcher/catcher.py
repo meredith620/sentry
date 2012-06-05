@@ -34,7 +34,7 @@ class Catcher:
 			self.file.write('\t'.join(self.head)+'\n')
 
 	def cpustat(self,cpu):
-		cells=cpu.split()
+		cells=cpu.split()                
 		return '\t'.join(cells[2:6])+'\t'+cells[7]
 
 	def memstat(self,mem):

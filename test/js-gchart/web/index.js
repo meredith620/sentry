@@ -28,7 +28,7 @@ function fetch_data(){
 	console.log('fetch');
 	console.log(count);
 	global.node.forEach(function(value,index){
-		var cmd='rsync '+value+':~/islet/*.sty node_root/'+value+'/';
+		var cmd='rsync supertool@'+value+':~/islet/*.sty node_root/'+value+'/';
 		console.log('fetch '+cmd);
 		cp.exec(cmd,function(err,stdout,stderr){
 			if(err){
@@ -71,7 +71,7 @@ function node_add(response,param){
 
 function deploy_islet(host,cb){
 	var deploy_cmd='scp -r ./islet '+host+':~/';
-	var run_cmd='ssh '+host+' "cd islet ; ./catcher.py &>log &"';
+	var run_cmd='ssh supertool@'+host+' "cd islet ; ./catcher.py &>log &"';
 	console.log(deploy_cmd);
 	cp.exec(deploy_cmd,function(err,stdout,stderr){
 		if(err){
