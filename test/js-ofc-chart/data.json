@@ -1,0 +1,97 @@
+{  
+      /* 图表标题 */  
+      "title" : {  
+        "text" : "Many data lines",         /* 标题文本 */  
+        "style" : "{font-size: 30px;}"  /* CSS样式 */  
+      },  
+      
+       "is_decimal_separator_comma": 0,     /* (0/1)，是否用逗号替换小数点 */  
+       "is_fixed_num_decimals_forced": 1,   /* (0/1)，是否强制小数点后面的位数 */  
+       "num_decimals":3,        /* 精度，即小数点后面的位数，需要配合上面参数一起使用 */  
+       "is_thousand_separator_disabled": 0,     /* (0/1)，是否使用千位分隔符 */  
+      
+      /* X轴标题（X轴下方） */  
+      "x_legend" : {  
+        "text" : "x_legend",                /* 标题文本 */  
+        "style" : "{font-size: 12px; color:#736AFF;}"       /* CSS样式 */  
+      },  
+      
+      /* Y轴标题（Y轴左方） */  
+      "y_legend" : {  
+        "text" : "y_legend",                /* 标题文本 */  
+        "style" : "{font-size: 12px; color:#2F55FF;}"       /* CSS样式 */  
+      },  
+      
+      /* X轴 */  
+      "x_axis" : {  
+        "stroke" : 2,                   /* X轴的粗细 */  
+        "tick-height" : 15,             /* X轴刻度的长度 */  
+        "colour" : "#df0fd0",           /* 颜色 */  
+        "grid-colour": "#00ff00",       /* 网格线的颜色 */  
+        "offset" : 1,                   /* (0/1), 是否根据数据图形和标签的宽度进行延展 */  
+        "3d" : 0,                       /* 显示3D */  
+        "steps" : 0.5,                  /* 刻度间隔 */  
+        "min":0,  
+        "max":8,  
+        "labels": {  
+            "rotate": "vertical",           /* 垂直方向显示标签 */  
+            "size":13,                      /* 字体大小 */  
+            "steps": 2,                     /* 整数，标签间隔 */  
+            "visible-steps": 3,             /* 可见标签间隔，会覆盖上面参数 */  
+            "align":"center",               /* 旋转的标签居中对齐，默认是较高的一端对其到刻度上 */  
+            "labels": [  
+                "January",  
+                {"text":"February", "visible":true, "colour":"ff0000", "rotate":-60},  
+                "March",  
+                {"text":"April","colour":"#00D000"},  
+                "May","June","July","August","September"]  
+        }  
+      },  
+      
+      /* Y轴 */  
+      "y_axis":{  
+        "stroke":      4,  
+        "tick-length": 3,  
+        "colour":      "#d000d0",  
+        "grid-colour": "#00ff00",  
+        "offset":      0,  
+        "max":         20  
+      },  
+      
+      /* 数据元素 */  
+      "elements":[  
+        {  
+          "type":      "bar",   /* 关于柱图类型参考“bar-all-onlick.json” （从官网下载ofc2完整包的话可以找到这个文件）*/  
+          "alpha":     0.5,  
+          "colour":    "#9933CC",  
+          "text":      "Page views",  
+          "font-size": 10,  
+          "on-show":    {       /* 展现样式 */  
+              "type": "pop",        /* 弹出方式, 此外还有 drop 和 grow-up */  
+              "cascade":1,          /* 不通柱子之间的间隔时间为 1 */  
+              "delay":0.5           /* 延迟时间 */  
+          },  
+          "values" :   [9,6,7,9,5,{"top":7,"bottom":2,"colour":"#A03030","tip":"#top#<br>hello/n#val#","on-click":"#"},6,null,7]  
+        },  
+        {  
+          "type":      "line",          /* 展示类型 —— 折线图 */  
+          "colour":    "#9933CC",       /* 线条颜色 */  
+          "width":     2,               /* 线条粗细 */  
+          "text":      "Page views",    /* 数据标题（Y轴上方） */  
+          "font-size": 10,              /* 数据标题字体大小 */  
+          "dot-size":  6,  
+          "values" :   [15,18,19,14,17,18,15,18,17]  
+        }],  
+      
+      /* 鼠标提示信息 */  
+      "tooltip":{  
+        "shadow":true,      /* 提示框影子 */  
+        "mouse":2,          /* 1 - 滑动样式，2 - 非滑动样式，折线图不支持*/  
+        "stroke":5,         /* 边框粗细 */  
+        "rounded": 12,      /* 边角圆滑程度 */  
+        "colour":"#00d000", /* 边框颜色 */  
+        "background":"#d0d0ff",     /* 背景颜色 */  
+        "title":"{font-size: 14px; color: #905050;}",       /* 标题样式 */  
+        "body":"{font-size: 10px; font-weight: bold; color: #9090ff;}"      /* 本体样式 */  
+      }  
+    }  
