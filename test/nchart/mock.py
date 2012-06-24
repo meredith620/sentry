@@ -113,7 +113,7 @@ if __name__ == "__main__":
      raw = f.readlines()[1:]
      # print("line: %s" % raw)
      part_dict = part_section(raw)
-     # print("split: %s" % repr(part_section(raw)))     
+     print("split: %s" % repr(part_dict))     
      for (k,v) in part_dict.items():
           print("key: %s" % k)
           print("value: %s\n" % repr(v))

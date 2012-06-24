@@ -1,6 +1,6 @@
 var querystring = require("querystring"),
-fs = require("fs"),
-formidable = require("formidable");
+fs = require("fs");
+// formidable = require("formidable");
 var sys = require('sys');
 
 function chart(response) {
@@ -15,15 +15,12 @@ function chart(response) {
 
 function servStatic(response, pathname) {
     var index = fs.readFileSync("." + pathname)
-    console.log("Request handler 'static' was called.: %s", pathname);
+    console.log("Request for %s", pathname);
 
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(index, "binary");
     response.end();    
 }
 
-exports.start = start;
-exports.upload = upload;
-exports.show = show;
 exports.chart = chart
 exports.servStatic = servStatic
