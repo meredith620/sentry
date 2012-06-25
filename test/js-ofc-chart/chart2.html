@@ -1,0 +1,25 @@
+<html>  
+<head>  
+<script type="text/javascript" src="js/swfobject.js"></script>  
+        <script type="text/javascript" src="js/json2.js"></script>  
+        <script type="text/javascript">  
+            //<![CDATA[  
+            swfobject.embedSWF(  
+             "open-flash-chart.swf",  
+             "my_chart",  
+             "60%",  
+             "60%",  
+             "9.0.0",  
+             "expressInstall.swf",  
+             {"data-file":"<%=request.getContextPath()%>/LineChartServlet"},  
+             {wmode:"transparent"});  
+             //]]>  
+         </script>  
+  
+  
+</head>  
+<body>  
+<p>Hello World</p>  
+<div id="my_chart"></div>  
+</body>  
+</html>  
