@@ -103,6 +103,9 @@ class DiskInfoParser(InfoParser):
                temp_list[i].append(str(float(val_list[i][7])*512/1024/1024))
                temp_list[i].append(str(float(val_list[i][8])*512/1024/1024))
           return temp_list
+class NetInfoParser(InfoParser):
+     def parse(self, val_list):
+          
      
 if __name__ == "__main__":
      cpuinfo = CpuInfoParser()
@@ -111,7 +114,7 @@ if __name__ == "__main__":
      
      f=os.popen("sar -n DEV -n EDEV -u -d -r -p 1 1 | sed -e '/^Average:/d'")
      raw = f.readlines()[1:]
-     # print("line: %s" % raw)
+     print("line: %s" % raw)
      part_dict = part_section(raw)
      # print("split: %s" % repr(part_section(raw)))     
      for (k,v) in part_dict.items():
