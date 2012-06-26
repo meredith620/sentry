@@ -8,6 +8,7 @@ import Queue
 cpuinfo = {}
 dickinfo = {}
 netinfo = {}
+diskinfo = {}
                
 
 def part_section(raw):
@@ -21,13 +22,16 @@ def part_section(raw):
           if x == "\n":
                start_new_section = True
           else:
-               vals = x.split()[2:]
+               temp = x.split()
+               if temp[1] == "AM" or temp[1] == "PM":
+                    vals = temp[2:]
+               else: vals = temp[1:]
                
                if start_new_section == True:
                     key = vals[0]
-                    # print("find key: %s (%s)" % (key, repr(vals)))
-                    if key.find("mem") != -1:
-                         key = "MEM"
+                    print("find key: %s (%s)" % (key, repr(vals)))
+                    # if key.find("mem") != -1:
+                    #      key = "MEM"
                     if key in sect_dict:
                          key = key + "_" + vals[1]                         
                     sect_dict[key] = []
@@ -105,12 +109,14 @@ class DiskInfoParser(InfoParser):
           return temp_list
 class NetInfoParser(InfoParser):
      def parse(self, val_list):
+          pass
           
      
 if __name__ == "__main__":
      cpuinfo = CpuInfoParser()
      meminfo = MemInfoParser()
      diskinfo = DiskInfoParser()
+     netinfo = NetInfoParser()
      
      f=os.popen("sar -n DEV -n EDEV -u -d -r -p 1 1 | sed -e '/^Average:/d'")
      raw = f.readlines()[1:]
@@ -122,14 +128,17 @@ if __name__ == "__main__":
           print("value: %s\n" % repr(v))
           if k.find("CPU") != -1:
                cpuinfo.read_list(v)
-          elif k.find("MEM") != -1:
+          elif k.find("mem") != -1:
                meminfo.read_list(v)
           elif k.find("DEV") != -1:
                diskinfo.read_list(v)
+          elif k.find("IFACE") != -1:
+               netinfo.read_list(v)
 
      print("cpu title: %s\ncpu value: %s\n" % (cpuinfo.get_title(), cpuinfo.get_values()))
      print("mem title: %s\nmem value: %s\n" % (meminfo.get_title(), meminfo.get_values()))
      print("disk title: %s\ndisk value: %s\n" % (diskinfo.get_title(), diskinfo.get_values()))
+     print("net title: %s\nnet value: %s\n" % (netkinfo.get_title(), netinfo.get_values()))
           
      # f=os.popen("sar -n DEV -n EDEV -u -d -r -p 10 1 | sed -e '/^Average:/d'")
      # raw = f.readlines()[1:]
