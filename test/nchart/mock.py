@@ -4,6 +4,7 @@ import sys
 import os
 import time
 import Queue
+import copy
 
 cpuinfo = {}
 dickinfo = {}
@@ -156,22 +157,105 @@ class RawParser:
                     else:
                         self.netinfo.read_list(v)
 
-
-if __name__ == "__main__":
-
-     rpsr = RawParser()
-     
-     f=os.popen("sar -n DEV -n EDEV -u -d -r -p 1 1 | sed -e '/^Average:/d'")
-     raw = f.readlines()[1:]
-     print("line: %s" % raw)
-     rpsr.parse_raw(raw)
-
-     print("cpu title: %s\ncpu value: %s\n" % (rpsr.cpuinfo.get_title(), rpsr.cpuinfo.get_values()))
-     print("mem title: %s\nmem value: %s\n" % (rpsr.meminfo.get_title(), rpsr.meminfo.get_values()))
-     print("disk title: %s\ndisk value: %s\n" % (rpsr.diskinfo.get_title(), rpsr.diskinfo.get_values()))
-     print("net title: %s\nnet value: %s\n" % (rpsr.netinfo.get_title(), rpsr.netinfo.get_values()))
-     print("neterr title: %s\nneterr value: %s\n" % (rpsr.neterrinfo.get_title(), rpsr.neterrinfo.get_values()))
+class Catcherx:
+     def __init__(self):
+          self.date=time.strftime('%Y%m%d')
+          self.file=open(self.date+'.sty','a')
+          self.rpsr = RawParser()
+          self.init_title()
+          if self.file.tell()==0:
+               self.file.write('\t'.join(self.head)+'\n')
+               self.file.flush()
           
+     def __del__(self):
+          self.file.close()
+          
+     def daycheck(self):
+          cur_date=time.strftime('%Y%m%d')
+          if self.date!=cur_date:
+               self.file.close()
+               self.date=cur_date
+               self.file=open(self.date+'.sty','a')
+               self.file.write('\t'.join(self.head)+'\n')
+
+     def mk_title(self, catchinfo):
+          p_title = []
+          t_title = catchinfo.get_title()[1:]
+          t_values = catchinfo.get_values()
+          for i in range(0, len(t_values)):
+               for x in t_title:
+                    tt = t_values[i][0]
+                    p_title.append(x + "(" + tt + ")")
+          # print("new title: %s" % repr(p_title))
+          return p_title
+          
+     def init_title(self):
+          f = os.popen("sar -n DEV -n EDEV -u -d -r -p 1 1 | sed -e '/^Average:/d'")
+          raw = f.readlines()[1:]
+          self.rpsr.parse_raw(raw)
+          self.head = []
+          self.head += self.mk_title(self.rpsr.cpuinfo)
+          self.head += self.mk_title(self.rpsr.meminfo)
+          self.head += self.mk_title(self.rpsr.diskinfo)
+          self.head += self.mk_title(self.rpsr.netinfo)
+          self.head += self.mk_title(self.rpsr.neterrinfo)
+          
+     def mk_value(self, catchinfo):
+          p_values = []
+          t_values = catchinfo.get_values()
+          for x in t_values:
+               p_values += x[1:]
+          print("new value: %s" % repr(p_values))
+          return p_values
+          
+     def catch(self):
+          self.daycheck()
+          f = os.popen("sar -n DEV -n EDEV -u -d -r -p 10 1 | sed -e '/^Average:/d'")
+          raw = f.readlines()[1:]
+          stat = [time.strftime('%Y-%m-%d %H:%M')]
+          stat += self.mk_value(self.rpsr.cpuinfo)
+          stat += self.mk_value(self.rpsr.meminfo)
+          stat += self.mk_value(self.rpsr.diskinfo)
+          stat += self.mk_value(self.rpsr.netinfo)
+          stat += self.mk_value(self.rpsr.neterrinfo)
+          self.file.write('\t'.join(stat)+'\n')
+          # print("==value: %s" % repr(stat))
+          
+def main():
+     catcherx = Catcherx()
+     while True:
+          catcherx.catch()
+          time.sleep(50)
+                        
+if __name__ == "__main__":
+     main()
+
+     # rpsr = RawParser()
+     
+     # f=os.popen("sar -n DEV -n EDEV -u -d -r -p 1 1 | sed -e '/^Average:/d'")
+     # raw = f.readlines()[1:]
+     # print("line: %s" % raw)
+     # rpsr.parse_raw(raw)
+
+     # print("cpu title: %s\ncpu value: %s\n" % (rpsr.cpuinfo.get_title(), rpsr.cpuinfo.get_values()))
+     # print("mem title: %s\nmem value: %s\n" % (rpsr.meminfo.get_title(), rpsr.meminfo.get_values()))
+     # print("disk title: %s\ndisk value: %s\n" % (rpsr.diskinfo.get_title(), rpsr.diskinfo.get_values()))
+     # print("net title: %s\nnet value: %s\n" % (rpsr.netinfo.get_title(), rpsr.netinfo.get_values()))
+     # print("neterr title: %s\nneterr value: %s\n" % (rpsr.neterrinfo.get_title(), rpsr.neterrinfo.get_values()))
+
+     # catcherx = Catcherx()
+     # catcherx.mk_title(rpsr.cpuinfo)
+     # catcherx.mk_title(rpsr.meminfo)
+     # catcherx.mk_title(rpsr.diskinfo)
+     # catcherx.mk_title(rpsr.netinfo)
+     # catcherx.mk_title(rpsr.neterrinfo)
+     
+     # catcherx.mk_value(rpsr.cpuinfo)
+     # catcherx.mk_value(rpsr.meminfo)
+     # catcherx.mk_value(rpsr.diskinfo)
+     # catcherx.mk_value(rpsr.netinfo)
+     # catcherx.mk_value(rpsr.neterrinfo)
+     
      # f=os.popen("sar -n DEV -n EDEV -u -d -r -p 10 1 | sed -e '/^Average:/d'")
      # raw = f.readlines()[1:]
      # print("raw: %s" % raw)

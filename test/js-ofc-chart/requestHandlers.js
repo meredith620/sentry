@@ -1,7 +1,7 @@
 var querystring = require("querystring"),
 fs = require("fs");
 // formidable = require("formidable");
-var sys = require('sys');
+var sys = require('util');
 
 function chart(response) {
     // var index = fs.readFileSync('chart2.html')
@@ -10,7 +10,7 @@ function chart(response) {
     // response.writeHead(200, {"Content-Type": "text/html"});
     // response.write(index, "binary");
     // response.end();
-    servStatic(response, '/chart2.html')
+    servStatic(response, '/chart.html')
 }
 
 function servStatic(response, pathname) {
