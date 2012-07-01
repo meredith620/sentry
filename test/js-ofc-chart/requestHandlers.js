@@ -1,6 +1,7 @@
 var querystring = require("querystring"),
 fs = require("fs");
 path = require("path");
+// formidable = require("formidable");
 var sys = require('util');
 
 function chart(response) {
@@ -10,6 +11,7 @@ function chart(response) {
     // response.writeHead(200, {"Content-Type": "text/html"});
     // response.write(index, "binary");
     // response.end();
+
     servStatic2(response, '/chart2.html')
 }
 
