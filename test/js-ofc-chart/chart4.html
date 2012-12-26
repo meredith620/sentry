@@ -1,0 +1,157 @@
+<script type="text/javascript" src="js/json/json2.js"></script>
+<script type="text/javascript" src="js/swfobject.js"></script>
+<script type="text/javascript">
+ 
+/*
+ 
+don't forget to include the JSON JS library :-) ^^
+ 
+*/
+ 
+swfobject.embedSWF(
+  "open-flash-chart.swf", "div_chart_1",
+  "300", "300", "9.0.0", "expressInstall.swf",
+  {"get-data":"get_data_1"} );
+ 
+swfobject.embedSWF(
+  "open-flash-chart.swf", "div_chart_2",
+  "450", "300", "9.0.0", "expressInstall.swf",
+  {"get-data":"get_data_2"} );
+ 
+ 
+function ofc_ready()
+{
+	// alert('ofc_ready');
+}
+ 
+ 
+function get_data_1()
+{
+	// alert( 'reading data 1' );
+	return JSON.stringify(data_1);
+}
+ 
+function get_data_2()
+{
+	// alert( 'reading data 2' );
+	// alert(JSON.stringify(data_2));
+	return JSON.stringify(data_2);
+}
+ 
+var data_1 = {
+  "title":{
+    "text":  "Many data lines",
+    "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"
+  },
+ 
+  "y_legend":{
+    "text": "Open Flash Chart",
+    "style": "{color: #736AFF; font-size: 12px;}"
+  },
+ 
+  "elements":[
+    {
+      "type":      "bar",
+      "alpha":     0.5,
+      "colour":    "#9933CC",
+      "text":      "Page views",
+      "font-size": 10,
+      "values" :   [9,6,7,9,5,7,6,9,7]
+    },
+    {
+      "type":      "bar",
+      "alpha":     0.5,
+      "colour":    "#CC9933",
+      "text":      "Page views 2",
+      "font-size": 10,
+      "values" :   [6,7,9,5,7,6,9,7,3]
+    }
+  ],
+ 
+  "x_axis":{
+    "stroke":1,
+    "tick_height":10,
+    "colour":"#d000d0",
+    "grid_colour":"#00ff00",
+    "labels": {
+        "labels": ["January","February","March","April","May","June","July","August","Spetember"]
+    }
+   },
+ 
+  "y_axis":{
+    "stroke":      4,
+    "tick_length": 3,
+    "colour":      "#d000d0",
+    "grid_colour": "#00ff00",
+    "offset":      0,
+    "max":         20
+  }
+};
+
+ 
+var data_2 = {
+  "title":{
+    "text":  "Many data lines",
+    "style": "{font-size: 20px; color:#0000ff; font-family: Verdana; text-align: center;}"
+  },
+ 
+  "y_legend":{
+    "text": "Open Flash Chart",
+    "style": "{color: #736AFF; font-size: 12px;}"
+  },
+ 
+  "elements":[
+    {
+      "type":      "bar",
+      "alpha":     0.5,
+      "colour":    "#9933CC",
+      "text":      "Page views",
+      "font-size": 10,
+      "values" :   [9,6,7,9,5,7,6,9,7]
+    },
+    {
+      "type":      "bar",
+      "alpha":     0.5,
+      "colour":    "#CC9933",
+      "text":      "Page views 2",
+      "font-size": 10,
+      "values" :   [6,7,9,5,7,6,9,7,3]
+    }
+  ],
+ 
+  "x_axis":{
+    "stroke":1,
+    "tick_height":10,
+    "colour":"#d000d0",
+    "grid_colour":"#00ff00",
+    "labels": {
+        "labels": ["January","February","March","April","May","June","July","August","Spetember"]
+    }
+   },
+ 
+  "y_axis":{
+    "stroke":      4,
+    "tick_length": 3,
+    "colour":      "#d000d0",
+    "grid_colour": "#00ff00",
+    "offset":      0,
+    "max":         20
+  }
+};
+ 
+</script>
+
+
+</head>
+<body>
+
+<p>Open Flash Chart</p>
+
+<div id="div_chart_1"></div>
+<div id="div_chart_2"></div>
+<br>
+<p>
+Don't forget to 'view source' to see how the Javascript JSON data is loaded.
+</p>
+</body>
+</html>

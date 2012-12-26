@@ -1,0 +1,32 @@
+<script type="text/javascript" src="js/swfobject.js"></script>
+
+<script type="text/javascript" src="redis_chart.js"></script>
+<script type="text/javascript">
+    
+swfobject.embedSWF(
+  "open-flash-chart.swf", "tps_chart",
+  "300", "300", "9.0.0", "expressInstall.swf",
+  {"get-data": "tps_chart_data"} );
+ 
+ 
+swfobject.embedSWF(
+  "open-flash-chart.swf", "keys_chart",
+  "450", "300", "9.0.0", "expressInstall.swf",
+  {"get-data": "keys_chart_data"} );
+  
+</script>
+</head>
+<body>
+
+<p>Open Flash Chart</p>
+
+<div id="tps_chart"></div>
+<br>
+<div id="keys_chart"></div>
+<br>
+<!-- <a href="javascript:load_1()>display data_1</a> || <a href="javascript:load_2()">display data_2</a> -->
+<p>
+Don't forget to 'view source' to see how the Javascript JSON data is loaded.
+</p>
+</body>
+</html>
