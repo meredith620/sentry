@@ -1,14 +1,69 @@
-var tps_data = { "elements": [ { "type": "area", "width": 2, "dot-style": { "type": "dot", "colour": "#9C0E57", "dot-size": 3 }, "colour": "#C4B86A", "fill": "#C4B86A", "fill-alpha": 0.7, "on-show": { "type": "pop-up", "cascade": 2, "delay": 0.5 }, "values": [ 3, 3.37747172851, 3.73989485039, 4.07282069945, 4.36297657271, 4.59879487114, 4.77087426334, 4.87235448698, 4.89918984578, 4.85031049867, 4.72766511097, 4.53614316726, 4.28338004305, 3.97945260646, 3.6364774853, 3.26812801531, 2.88908912749, 2.51447190615, 2.15921115774, 1.83747000721, 1.56207525891, 1.34400603241, 1.19195605961, 1.1119870931, 1.10728724321, 1.17804387814, 1.32143615413, 1.53174747364, 1.80059338804, 2.11725585911, 2.46911055342, 2.84213013465, 3.22144348922, 3.59192859068, 3.93881536716, 4.24827453757, 4.50796894131, 4.70754538204, 4.83904737686, 4.89723235621, 4.87978066858, 4.78738805769, 4.62373792537, 4.39535448596, 4.11134266649, 3.78302512196, 3.42349083679, 3.04707330836, 2.66877911568, 2.30368965442, 1.96635988931, 1.67023809357, 1.42712970874, 1.24672669894, 1.13622116287, 1.10001860755, 1.13956231461, 1.25327580124, 1.43662566956, 1.68230233892, 1.9805114558, 2.31936436375, 2.68535206665, 3.06388378972, 3.43986866769, 3.79831736997, 4.12493967794, 4.40671419091, 4.63240744823, 4.79302177194, 4.88215397582, 4.89625064016, 4.83474977544, 4.70010322707, 4.49767892801, 4.2355468963, 3.92415750882, 3.57592487782, 3.20473193937, 2.82537698457, 2.45298369834, 2.10239822584, 1.78759730354, 1.52113105078, 1.3136226362, 1.17334476543, 1.10588987452, 1.11394717711, 1.19719545396, 1.35231585898, 1.57312423113, 1.85081763743, 2.17432531806, 2.5307500427, 2.90588228233, 3.28476669836, 3.65229836476, 3.9938249538, 4.29573087813, 4.54598010126, 4.73459597638, 4.85405898376, 4.89960651027, 4.86942271978, 4.76471094475, 4.58964571322, 4.35120632352, 4.05889860168, 3.72437593414, 3.36097468401, 2.98318251235 ] } ], "title": { "text": "Area Chart" }, "y_axis": { "min": 0, "max": 8, "steps": 2, "labels": ["a", "b", "c", "d", "e"], "offset": 0 }, "x_axis": { "labels": { "steps": 4, "rotate": 270 , "labels": ["a", "b", "c", "d", "e"]}, "steps": 4, "min": 0, "max": 100 } }
+// var data_model = { "elements": [ { "type": "area", "width": 2, "dot-style": { "type": "dot", "colour": "#9C0E57", "dot-size": 3 }, "colour": "#C4B86A", "fill": "#C4B86A", "fill-alpha": 0.7, "on-show": { "type": "pop-up", "cascade": 2, "delay": 0.5 }, "values": [] } ], "title": { "text": "Area Chart" }, "y_axis": { "min": 0, "max": 8, "steps": 2, "labels": ["a", "b", "c", "d", "e"], "offset": 0 }, "x_axis": { "labels": { "steps": 4, "rotate": 270 , "labels": ["a", "b", "c", "d", "e"]}, "steps": 4, "min": 0, "max": 100 } }
+var data_model = { "elements": [ { "type": "area", "width": 2, "dot-style": { "type": "dot", "colour": "#9C0E57", "dot-size": 3 }, "colour": "#C4B86A", "fill": "#C4B86A", "fill-alpha": 0.7, "values": [] } ], "title": { "text": "" }, "y_axis": { "min": 0, "max": 100000, "steps": 1, "labels": [], "offset": 0 }, "x_axis": { "labels": { "steps": 4, "rotate": 270 , "labels": []}, "steps": 1, "min": 0, "max": 2880 } }
 
-var keys_data = { "elements": [ { "type": "area", "width": 2, "dot-style": { "type": "dot", "colour": "#9C0E57", "dot-size": 7 }, "colour": "#C4B86A", "fill": "#C4B86A", "fill-alpha": 0.7, "on-show": { "type": "pop-up", "cascade": 2, "delay": 0.5 }, "values": [ 0, 0.377471728511, 0.739894850386, 1.07282069945, 1.36297657271, 1.59879487114, 1.77087426334, 1.87235448698, 1.89918984578, 1.85031049867, 1.72766511097, 1.53614316726, 1.28338004305, 0.979452606461, 0.636477485296, 0.268128015314, -0.110910872512, -0.485528093851, -0.84078884226, -1.16252999279, -1.43792474109, -1.65599396759, -1.80804394039, -1.8880129069, -1.89271275679, -1.82195612186, -1.67856384587, -1.46825252636, -1.19940661196, -0.882744140886, -0.530889446578 ] } ], "title": { "text": "Area Chart" }, "y_axis": { "min": -2, "max": 2, "steps": 2, "labels": null, "offset": 0 }, "x_axis": { "labels": { "steps": 4, "rotate": 270 }, "steps": 2 } }
+var key_map = {"time":/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]3/, "keys": /\[keys=(\d+)\]/, "tps": /\[tps=(\d+)\]}/, "mem": /\[mem=(\d+)\]/}
+var data_map = {"time":data_model, "keys": data_model, "tps": data_model, "mem": data_model}
+data_map["keys"]["title"]["text"] = "keys"
+data_map["tps"]["title"]["text"] = "tps"
+data_map["mem"]["title"]["text"] = "mem"
 
+var filename = "redis_log/2012/12/28/all_master_20121228.log"
+
+var fs = require('fs')
+var data_ready = false;
+function prepare_data() {
+    if (data_ready) {
+        return;
+    }
+
+    function process_line(line) {
+        for (k in key_map) {
+            var da = key_map[k].exec(line)
+            if (da != null) {
+                data_map[k]["elements"][0]["values"][data_map[k]["elements"][0]["values"].length] = parseInt(da[1], 10)
+            }
+        }
+    }
+    
+    // fs.readFile(filename, function(err, data) {    
+    //     var res = data.toString().split("\n");
+    //     for (i in res) {
+    //         process_line(res[i])
+    //     }
+    //     data_ready = true
+    // });
+    
+    var res = fs.readFileSync(filename).toString().split("\n")
+    for (i in res) {
+        process_line(res[i])
+    }
+    data_ready = true
+}
+
+// var res = fs.readFileSync(filename).toString().split("\n")
+// for (i in res) {
+//     process_line(res[i])
+// }
+// console.log("data ready")
+    
 function tps_chart_data() {
-    return JSON.stringify(tps_data);
+    prepare_data();
+    return JSON.stringify(data_map["tps"]);
+    // return data_map["tps"]
 }
 
 function keys_chart_data() {
-    return JSON.stringify(keys_data);
+    prepare_data();
+    return JSON.stringify(data_map["keys"]);
+    // return data_map["keys"]
 }
 
-function read_chart_data(target_date) {    
+function mem_chart_data() {
+    // return JSON.stringify(data_map["mem"]);
+    return data_map["mem"]
 }
+
+// function read_chart_data(target_date) {    
+// }
+
+console.log("log:", keys_chart_data())
