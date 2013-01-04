@@ -26,7 +26,7 @@ function servStatic(response, pathname) {
 
 function servStatic2(response, pathname) {
     var realpath = "." + pathname;
-    path.exists (realpath, function (exists){
+    fs.exists (realpath, function (exists){
         if (!exists) {
             response.writeHead(404, {'Content-Type': 'text/plain'});
             response.write("This request URL " + pathname + " was not found on this server.");
